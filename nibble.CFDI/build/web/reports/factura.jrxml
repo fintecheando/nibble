@@ -1,0 +1,680 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!-- Created with Jaspersoft Studio version last-->
+<jasperReport xmlns="http://jasperreports.sourceforge.net/jasperreports" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:schemaLocation="http://jasperreports.sourceforge.net/jasperreports http://jasperreports.sourceforge.net/xsd/jasperreport.xsd" name="factura" pageWidth="612" pageHeight="792" columnWidth="535" leftMargin="9" rightMargin="0" topMargin="20" bottomMargin="20" scriptletClass="org.nibble.util.Scriptlet" uuid="cf53bce0-5e2f-47bf-ac32-d1dac7139218">
+	<property name="ireport.zoom" value="1.5"/>
+	<property name="ireport.x" value="0"/>
+	<property name="ireport.y" value="353"/>
+	<property name="ireport.scriptlethandling" value="2"/>
+	<property name="ireport.encoding" value="UTF-8"/>
+	<property name="com.jaspersoft.studio.data.defaultdataadapter" value="One Empty Record"/>
+	<import value="net.sf.jasperreports.engine.*"/>
+	<import value="java.util.*"/>
+	<import value="net.sf.jasperreports.engine.data.*"/>
+	<style name="Arial_Normal" isDefault="true" fontName="Arial" isBold="false" isItalic="false" isUnderline="false" isStrikeThrough="false" pdfFontName="Helvetica" pdfEncoding="Cp1252" isPdfEmbedded="false"/>
+	<style name="Arial_Bold" fontName="Arial" isBold="true" isItalic="false" isUnderline="false" isStrikeThrough="false" pdfFontName="Helvetica-Bold" pdfEncoding="Cp1252" isPdfEmbedded="false"/>
+	<style name="Arial_Italic" fontName="Arial" isBold="false" isItalic="true" isUnderline="false" isStrikeThrough="false" pdfFontName="Helvetica-Oblique" pdfEncoding="Cp1252" isPdfEmbedded="false"/>
+	<parameter name="FECHA" class="java.lang.String" isForPrompting="false"/>
+	<parameter name="REFERENCIA" class="java.lang.String" isForPrompting="false"/>
+	<parameter name="FEC_VENC" class="java.lang.String" isForPrompting="false"/>
+	<parameter name="NO_CLIENTE" class="java.lang.String" isForPrompting="false"/>
+	<parameter name="VENDEDOR" class="java.lang.String" isForPrompting="false"/>
+	<parameter name="PEDIDO" class="java.lang.String" isForPrompting="false"/>
+	<parameter name="CONDICIONES" class="java.lang.String" isForPrompting="false"/>
+	<parameter name="TRANSPORTE" class="java.lang.String" isForPrompting="false"/>
+	<parameter name="F_IVA" class="java.lang.Double" isForPrompting="false"/>
+	<parameter name="PDESCUENTO" class="java.lang.Double" isForPrompting="false"/>
+	<parameter name="RAZON_SOCIAL" class="java.lang.String" isForPrompting="false"/>
+	<parameter name="CALLE" class="java.lang.String" isForPrompting="false"/>
+	<parameter name="COLONIA" class="java.lang.String" isForPrompting="false"/>
+	<parameter name="R_F_C" class="java.lang.String" isForPrompting="false"/>
+	<parameter name="C_P" class="java.lang.String" isForPrompting="false"/>
+	<parameter name="ESTADO" class="java.lang.String" isForPrompting="false"/>
+	<parameter name="TELEFONO" class="java.lang.String" isForPrompting="false"/>
+	<parameter name="MUNICIPIO" class="java.lang.String" isForPrompting="false"/>
+	<parameter name="SERIE_CERTIFICADO" class="java.lang.String" isForPrompting="false"/>
+	<parameter name="SERIE" class="java.lang.String" isForPrompting="false"/>
+	<parameter name="FOLIO" class="java.lang.String" isForPrompting="false"/>
+	<parameter name="ANO_APROBACION" class="java.lang.String" isForPrompting="false"/>
+	<parameter name="NUM_APROBACION" class="java.lang.String" isForPrompting="false"/>
+	<parameter name="FOLIO_FAC" class="java.lang.String" isForPrompting="false"/>
+	<parameter name="FORMA_PAGO" class="java.lang.String" isForPrompting="false"/>
+	<parameter name="CADENA_ORIGINAL" class="java.lang.String" isForPrompting="false"/>
+	<parameter name="SELLO_DIGITAL_EMISOR" class="java.lang.String" isForPrompting="false"/>
+	<parameter name="NOM_EMISOR" class="java.lang.String" isForPrompting="false"/>
+	<parameter name="RFC_EMISOR" class="java.lang.String" isForPrompting="false"/>
+	<parameter name="DOM_EMISOR" class="java.lang.String" isForPrompting="false"/>
+	<parameter name="DOM_RECEPTOR" class="java.lang.String" isForPrompting="false"/>
+	<parameter name="LOGO" class="java.lang.Object" isForPrompting="false"/>
+	<parameter name="METODO_PAGO" class="java.lang.String" isForPrompting="false"/>
+	<parameter name="CUENTA_PAGO" class="java.lang.String" isForPrompting="false"/>
+	<parameter name="CBB" class="java.lang.Object" isForPrompting="false"/>
+	<parameter name="FOLIO_FISCAL" class="java.lang.String" isForPrompting="false"/>
+	<parameter name="NO_SERIE_CSD_SAT" class="java.lang.String" isForPrompting="false"/>
+	<parameter name="NO_SERIE_CSD_EMISOR" class="java.lang.String" isForPrompting="false"/>
+	<parameter name="FECHA_HORA_CERTIFICACION" class="java.lang.String" isForPrompting="false"/>
+	<parameter name="FECHA_HORA_EMISION" class="java.lang.String" isForPrompting="false"/>
+	<parameter name="SELLO_DIGITAL_SAT" class="java.lang.String" isForPrompting="false"/>
+	<parameter name="LUGAR_EXPEDICION" class="java.lang.String" isForPrompting="false"/>
+	<parameter name="REGIMEN_FISCAL" class="java.lang.String" isForPrompting="false"/>
+	<field name="CANTIDAD" class="java.lang.Integer"/>
+	<field name="UNIDAD" class="java.lang.String"/>
+	<field name="NO_PARTE" class="java.lang.String"/>
+	<field name="DESCRIPCION" class="java.lang.String"/>
+	<field name="NIVEL" class="java.lang.String"/>
+	<field name="PRECIO" class="java.lang.Double"/>
+	<field name="IMPORTE" class="java.lang.Double"/>
+	<field name="FOLIO" class="java.lang.Integer"/>
+	<variable name="SUBTOTAL" class="java.lang.Double" resetType="Group" resetGroup="FOLIO" calculation="Sum">
+		<variableExpression><![CDATA[$F{IMPORTE}]]></variableExpression>
+		<initialValueExpression><![CDATA[new Double(0.0)]]></initialValueExpression>
+	</variable>
+	<variable name="IVA" class="java.lang.Double" resetType="Page">
+		<variableExpression><![CDATA[new Double(($P{F_IVA}).doubleValue()*($V{SUBTOTAL}).doubleValue()/100)]]></variableExpression>
+		<initialValueExpression><![CDATA[new Double(0.0)]]></initialValueExpression>
+	</variable>
+	<variable name="DESCUENTO" class="java.lang.Double" resetType="Group" resetGroup="FOLIO">
+		<variableExpression><![CDATA[new Double(($V{SUBTOTAL}).doubleValue()*($P{PDESCUENTO}).doubleValue()/100)]]></variableExpression>
+		<initialValueExpression><![CDATA[new Double(0.0)]]></initialValueExpression>
+	</variable>
+	<variable name="TOTAL" class="java.lang.Double" resetType="Page">
+		<variableExpression><![CDATA[new Double(($V{SUBTOTAL}.doubleValue())-($V{DESCUENTO}).doubleValue()+($V{IVA}).doubleValue())]]></variableExpression>
+		<initialValueExpression><![CDATA[new Double(0.0)]]></initialValueExpression>
+	</variable>
+	<group name="FOLIO" isStartNewPage="true">
+		<groupExpression><![CDATA[$F{FOLIO}]]></groupExpression>
+		<groupHeader>
+			<band splitType="Stretch"/>
+		</groupHeader>
+		<groupFooter>
+			<band splitType="Stretch"/>
+		</groupFooter>
+	</group>
+	<background>
+		<band splitType="Stretch"/>
+	</background>
+	<title>
+		<band splitType="Stretch"/>
+	</title>
+	<pageHeader>
+		<band height="302" splitType="Stretch">
+			<rectangle radius="4">
+				<reportElement key="rectangle-1" x="360" y="104" width="231" height="81" forecolor="#CCCCCC" uuid="d60eaccb-d150-495e-a6d4-179acc29536f"/>
+			</rectangle>
+			<rectangle radius="4">
+				<reportElement key="rectangle-4" x="11" y="181" width="338" height="83" forecolor="#CCCCCC" uuid="6a44d9ca-82c6-4e5a-9fa8-672bd246a568"/>
+			</rectangle>
+			<textField isStretchWithOverflow="true" pattern="" isBlankWhenNull="false">
+				<reportElement key="textField" style="Arial_Normal" mode="Opaque" x="75" y="182" width="270" height="12" forecolor="#000000" backcolor="#FFFFFF" uuid="1e32f662-4d96-4f75-952e-749ee756e7e8"/>
+				<textElement textAlignment="Left" verticalAlignment="Top">
+					<font size="8"/>
+					<paragraph lineSpacing="Single"/>
+				</textElement>
+				<textFieldExpression><![CDATA[$P{RAZON_SOCIAL}]]></textFieldExpression>
+			</textField>
+			<textField isStretchWithOverflow="true" pattern="" isBlankWhenNull="false">
+				<reportElement key="textField" style="Arial_Normal" mode="Opaque" x="84" y="210" width="261" height="47" forecolor="#000000" backcolor="#FFFFFF" uuid="a3f6a298-b26a-48c3-b4de-4e936c1cf86c"/>
+				<textElement textAlignment="Left" verticalAlignment="Top">
+					<font size="8"/>
+					<paragraph lineSpacing="Single"/>
+				</textElement>
+				<textFieldExpression><![CDATA[$P{DOM_RECEPTOR}]]></textFieldExpression>
+			</textField>
+			<textField isStretchWithOverflow="true" pattern="" isBlankWhenNull="false">
+				<reportElement key="textField" style="Arial_Normal" mode="Opaque" x="40" y="196" width="130" height="12" forecolor="#000000" backcolor="#FFFFFF" uuid="7305e3de-4c8f-4004-9fbe-b2f14b227dea"/>
+				<textElement textAlignment="Left" verticalAlignment="Top">
+					<font size="8"/>
+					<paragraph lineSpacing="Single"/>
+				</textElement>
+				<textFieldExpression><![CDATA[$P{R_F_C}]]></textFieldExpression>
+			</textField>
+			<rectangle radius="4">
+				<reportElement key="rectangle-3" x="12" y="104" width="337" height="71" forecolor="#CCCCCC" uuid="41f5e8a4-050c-4169-a1f8-6509af803ec7"/>
+			</rectangle>
+			<rectangle radius="4">
+				<reportElement key="rectangle-333" x="495" y="21" width="95" height="54" forecolor="#CCCCCC" uuid="57907149-dee1-4af1-9eca-43fe279c8259"/>
+			</rectangle>
+			<staticText>
+				<reportElement key="staticText-12" style="Arial_Normal" x="15" y="182" width="58" height="13" forecolor="#000066" uuid="507f6a31-556a-4582-976f-f86900ef3195"/>
+				<textElement>
+					<font size="8" isBold="true" pdfFontName="Helvetica-Bold"/>
+				</textElement>
+				<text><![CDATA[Facturado a:]]></text>
+			</staticText>
+			<staticText>
+				<reportElement key="staticText-14" style="Arial_Normal" x="15" y="196" width="23" height="11" forecolor="#000066" uuid="100109f7-9c08-4ce8-a178-123b0a4497d7"/>
+				<textElement>
+					<font size="8" isBold="true" pdfFontName="Helvetica-Bold"/>
+				</textElement>
+				<text><![CDATA[RFC:]]></text>
+			</staticText>
+			<staticText>
+				<reportElement key="staticText-15" style="Arial_Normal" x="15" y="209" width="68" height="13" forecolor="#000066" uuid="4176eaf2-3014-4e64-92a6-9bfd5a07e541"/>
+				<textElement>
+					<font size="8" isBold="true" pdfFontName="Helvetica-Bold"/>
+				</textElement>
+				<text><![CDATA[Domicilio Fiscal:]]></text>
+			</staticText>
+			<staticText>
+				<reportElement key="staticText-16" style="Arial_Normal" x="15" y="108" width="81" height="11" forecolor="#000066" uuid="2386c38b-aa89-4225-9742-a9a289a084de"/>
+				<textElement>
+					<font size="8" isBold="true" pdfFontName="Helvetica-Bold"/>
+				</textElement>
+				<text><![CDATA[Contribuyente:]]></text>
+			</staticText>
+			<staticText>
+				<reportElement key="staticText-17" style="Arial_Normal" x="221" y="108" width="20" height="10" forecolor="#000066" uuid="3b98dd0b-383a-4676-8651-5549b1ae12e1"/>
+				<textElement>
+					<font size="8" isBold="true" pdfFontName="Helvetica-Bold"/>
+				</textElement>
+				<text><![CDATA[RFC:]]></text>
+			</staticText>
+			<staticText>
+				<reportElement key="staticText-18" style="Arial_Normal" x="15" y="120" width="68" height="11" forecolor="#000066" uuid="1e3879a2-fa6d-4a8b-962b-d45a90219b0d"/>
+				<textElement>
+					<font size="8" isBold="true" pdfFontName="Helvetica-Bold"/>
+				</textElement>
+				<text><![CDATA[Domicilio Fiscal:]]></text>
+			</staticText>
+			<staticText>
+				<reportElement key="staticText-19" style="Arial_Normal" x="364" y="108" width="50" height="10" forecolor="#000066" uuid="e0a39a75-7533-4797-9fae-66682da9084f"/>
+				<textElement>
+					<font size="8" isBold="true" pdfFontName="Helvetica-Bold"/>
+				</textElement>
+				<text><![CDATA[Folio Fiscal:]]></text>
+			</staticText>
+			<staticText>
+				<reportElement key="staticText-20" style="Arial_Normal" x="364" y="121" width="119" height="10" forecolor="#000066" uuid="68867f90-9729-452d-afc1-f1b840d30165"/>
+				<textElement>
+					<font size="8" isBold="true" pdfFontName="Helvetica-Bold"/>
+				</textElement>
+				<text><![CDATA[Número de serie CSD del SAT:]]></text>
+			</staticText>
+			<staticText>
+				<reportElement key="staticText-23" style="Arial_Normal" x="497" y="35" width="91" height="13" forecolor="#000066" uuid="ad0b2ff8-e9c7-40d5-ae41-3d972f6822c0"/>
+				<textElement>
+					<font size="8" isBold="true" pdfFontName="Helvetica-Bold"/>
+				</textElement>
+				<text><![CDATA[Numero de Documento]]></text>
+			</staticText>
+			<rectangle radius="4">
+				<reportElement key="rectangle-11" x="360" y="207" width="231" height="57" forecolor="#CCCCCC" uuid="338dc59f-fde1-41d0-aff7-86d5cef11075"/>
+			</rectangle>
+			<textField isStretchWithOverflow="true" pattern="" isBlankWhenNull="false">
+				<reportElement key="textField-1" style="Arial_Normal" mode="Opaque" x="498" y="133" width="90" height="12" forecolor="#000000" backcolor="#FFFFFF" uuid="7d9c71d8-e790-445c-b6ee-779f9f0b6ef7"/>
+				<textElement textAlignment="Left" verticalAlignment="Top">
+					<font size="8"/>
+					<paragraph lineSpacing="Single"/>
+				</textElement>
+				<textFieldExpression><![CDATA[$P{NO_SERIE_CSD_EMISOR}]]></textFieldExpression>
+			</textField>
+			<textField isStretchWithOverflow="true" pattern="" isBlankWhenNull="false">
+				<reportElement key="textField-2" style="Arial_Normal" mode="Opaque" x="483" y="121" width="106" height="10" forecolor="#000000" backcolor="#FFFFFF" uuid="182e9aeb-165c-49c6-a439-ff6fba26782a"/>
+				<textElement textAlignment="Left" verticalAlignment="Top">
+					<font size="8"/>
+					<paragraph lineSpacing="Single"/>
+				</textElement>
+				<textFieldExpression><![CDATA[$P{NO_SERIE_CSD_SAT}]]></textFieldExpression>
+			</textField>
+			<textField isStretchWithOverflow="true" pattern="" isBlankWhenNull="false">
+				<reportElement key="textField-3" style="Arial_Normal" mode="Opaque" x="541" y="49" width="45" height="20" forecolor="#000000" backcolor="#FFFFFF" uuid="560949c8-433f-46d5-9958-9b0dfdff62a7"/>
+				<textElement textAlignment="Left" verticalAlignment="Top">
+					<font size="8" isBold="true"/>
+					<paragraph lineSpacing="Single"/>
+				</textElement>
+				<textFieldExpression><![CDATA[$P{FOLIO_FAC}]]></textFieldExpression>
+			</textField>
+			<textField isStretchWithOverflow="true" pattern="" isBlankWhenNull="false">
+				<reportElement key="textField-4" style="Arial_Normal" mode="Opaque" x="502" y="49" width="27" height="21" forecolor="#000000" backcolor="#FFFFFF" uuid="35bb79ec-d0ec-42c2-928f-5c14109c3f51"/>
+				<textElement textAlignment="Left" verticalAlignment="Top">
+					<font size="8" isBold="true"/>
+					<paragraph lineSpacing="Single"/>
+				</textElement>
+				<textFieldExpression><![CDATA[$P{SERIE}]]></textFieldExpression>
+			</textField>
+			<textField isStretchWithOverflow="true" pattern="" isBlankWhenNull="false">
+				<reportElement key="textField-5" style="Arial_Normal" mode="Opaque" x="414" y="107" width="173" height="12" forecolor="#000000" backcolor="#FFFFFF" uuid="9f4120bc-4871-4eae-ae57-cd1e6d780ad1"/>
+				<textElement textAlignment="Left" verticalAlignment="Top">
+					<font size="8"/>
+					<paragraph lineSpacing="Single"/>
+				</textElement>
+				<textFieldExpression><![CDATA[$P{FOLIO_FISCAL}]]></textFieldExpression>
+			</textField>
+			<textField isStretchWithOverflow="true" pattern="" isBlankWhenNull="false">
+				<reportElement key="textField-6" style="Arial_Normal" mode="Opaque" x="76" y="108" width="140" height="12" forecolor="#000000" backcolor="#FFFFFF" uuid="8ec29517-7827-4811-b3b5-4d8fb9308dd2"/>
+				<textElement textAlignment="Left" verticalAlignment="Top">
+					<font size="8"/>
+					<paragraph lineSpacing="Single"/>
+				</textElement>
+				<textFieldExpression><![CDATA[$P{NOM_EMISOR}]]></textFieldExpression>
+			</textField>
+			<textField isStretchWithOverflow="true" pattern="" isBlankWhenNull="false">
+				<reportElement key="textField-7" style="Arial_Normal" mode="Opaque" x="243" y="108" width="103" height="12" forecolor="#000000" backcolor="#FFFFFF" uuid="f715ae96-c222-4a21-9d78-2f1296334e17"/>
+				<textElement textAlignment="Left" verticalAlignment="Top">
+					<font size="8"/>
+					<paragraph lineSpacing="Single"/>
+				</textElement>
+				<textFieldExpression><![CDATA[$P{RFC_EMISOR}]]></textFieldExpression>
+			</textField>
+			<textField isStretchWithOverflow="true" pattern="" isBlankWhenNull="false">
+				<reportElement key="textField-11" style="Arial_Normal" mode="Opaque" x="79" y="120" width="267" height="24" forecolor="#000000" backcolor="#FFFFFF" uuid="85321163-16d7-41d5-8bd6-da07259c5d43"/>
+				<textElement textAlignment="Left" verticalAlignment="Top">
+					<font size="8"/>
+					<paragraph lineSpacing="Single"/>
+				</textElement>
+				<textFieldExpression><![CDATA[$P{DOM_EMISOR}]]></textFieldExpression>
+			</textField>
+			<image>
+				<reportElement key="image-1" mode="Transparent" x="11" y="7" width="89" height="81" isRemoveLineWhenBlank="true" uuid="f41f2773-26fd-488b-8875-9ed77fe1f2ec"/>
+				<imageExpression><![CDATA[$P{LOGO}]]></imageExpression>
+			</image>
+			<staticText>
+				<reportElement key="staticText-30" style="Arial_Normal" x="124" y="21" width="354" height="41" forecolor="#CC0000" uuid="8a10827d-5dc1-447c-85af-dd757c46b887"/>
+				<textElement>
+					<font fontName="Times New Roman" size="30" isBold="true" pdfFontName="Helvetica-Bold"/>
+				</textElement>
+				<text><![CDATA[CONFECCIONES VILAN]]></text>
+			</staticText>
+			<staticText>
+				<reportElement key="staticText-32" style="Arial_Normal" x="149" y="58" width="305" height="30" forecolor="#000066" uuid="0e67750d-6265-44ff-b304-9c3ae1fea985"/>
+				<textElement textAlignment="Center">
+					<font fontName="Times New Roman" size="12" isBold="true" isItalic="true" pdfFontName="Helvetica-BoldOblique"/>
+				</textElement>
+				<text><![CDATA[Uniformes industriales, empresariales, escolares, deportivos, bordados.]]></text>
+			</staticText>
+			<staticText>
+				<reportElement key="staticText-33" style="Arial_Normal" x="366" y="135" width="131" height="10" forecolor="#000066" uuid="6610c5bf-e3b4-4619-8020-f0cbcb23bd22"/>
+				<textElement>
+					<font size="8" isBold="true" pdfFontName="Helvetica-Bold"/>
+				</textElement>
+				<text><![CDATA[Número de serie CSD del Emisor:]]></text>
+			</staticText>
+			<staticText>
+				<reportElement key="staticText-34" style="Arial_Normal" x="517" y="22" width="51" height="14" forecolor="#000066" uuid="574a4e7b-0a38-4eae-8ea2-af6a959bd411"/>
+				<textElement>
+					<font size="10" isBold="true" pdfFontName="Helvetica-Bold"/>
+				</textElement>
+				<text><![CDATA[FACTURA]]></text>
+			</staticText>
+			<staticText>
+				<reportElement key="staticText-3" style="Arial_Normal" x="364" y="214" width="62" height="13" forecolor="#000066" uuid="5bce515a-551b-4a99-bd97-f5610f63629c"/>
+				<textElement>
+					<font size="8" isBold="true" pdfFontName="Helvetica-Bold"/>
+				</textElement>
+				<text><![CDATA[Forma de Pago:]]></text>
+			</staticText>
+			<textField isStretchWithOverflow="true" pattern="" isBlankWhenNull="false">
+				<reportElement key="textField-8" style="Arial_Normal" mode="Opaque" x="453" y="214" width="110" height="12" forecolor="#000000" backcolor="#FFFFFF" uuid="6bbb0b75-1bf9-4f5e-9a41-c7f79871ec10"/>
+				<textElement textAlignment="Left" verticalAlignment="Top">
+					<font size="8"/>
+					<paragraph lineSpacing="Single"/>
+				</textElement>
+				<textFieldExpression><![CDATA[$P{FORMA_PAGO}]]></textFieldExpression>
+			</textField>
+			<staticText>
+				<reportElement key="staticText-6" style="Arial_Normal" x="-181" y="-143" width="260" height="12" forecolor="#000066" uuid="b13995b0-e725-400d-b585-8df66c1f4cd7"/>
+				<textElement>
+					<font isBold="true" pdfFontName="Helvetica-Bold"/>
+				</textElement>
+				<text><![CDATA[Este documento es una impresión de un comprobante fiscal digital]]></text>
+			</staticText>
+			<textField pattern="" isBlankWhenNull="false">
+				<reportElement key="textField" style="Arial_Normal" mode="Opaque" x="483" y="148" width="102" height="12" forecolor="#000000" backcolor="#FFFFFF" uuid="731b3e3c-c072-4623-aa15-ac28c890a8b3"/>
+				<textElement textAlignment="Left" verticalAlignment="Middle">
+					<font size="8" isBold="true"/>
+					<paragraph lineSpacing="Single"/>
+				</textElement>
+				<textFieldExpression><![CDATA[$P{FECHA_HORA_CERTIFICACION}]]></textFieldExpression>
+			</textField>
+			<rectangle radius="4">
+				<reportElement key="rectangle-11" x="36" y="-143" width="180" height="20" forecolor="#CCCCCC" uuid="31b60769-7d4e-4950-8c89-26fbbb92010d"/>
+			</rectangle>
+			<rectangle radius="4">
+				<reportElement key="rectangle-11" x="36" y="-139" width="180" height="20" forecolor="#CCCCCC" uuid="d2e692c6-46b0-4682-b863-710d0d49559d"/>
+			</rectangle>
+			<rectangle radius="4">
+				<reportElement key="rectangle-11" x="36" y="-139" width="180" height="20" forecolor="#CCCCCC" uuid="65a19f3f-5ac0-46a5-9550-f657e3d6f636"/>
+			</rectangle>
+			<rectangle radius="4">
+				<reportElement key="rectangle-3" x="-263" y="-92" width="479" height="45" forecolor="#CCCCCC" uuid="e1289874-a0ca-4b07-b85f-8a125a61617a"/>
+			</rectangle>
+			<staticText>
+				<reportElement key="staticText-32" style="Arial_Normal" x="195" y="85" width="219" height="22" forecolor="#000066" uuid="2ef19a8b-7095-4ac3-9f4d-be4b4c353593"/>
+				<textElement textAlignment="Left">
+					<font fontName="Times New Roman" size="8" isBold="true" isItalic="true" pdfFontName="Helvetica-BoldOblique"/>
+				</textElement>
+				<text><![CDATA[Teléfonos: 5119-2052, 5752-0503 Tel/Fax: 5752-2869]]></text>
+			</staticText>
+			<staticText>
+				<reportElement key="staticText-35" style="Arial_Normal" x="364" y="227" width="68" height="13" forecolor="#000066" uuid="10596456-ee3c-4d19-bd04-606e5190ace7"/>
+				<textElement>
+					<font size="8" isBold="true" pdfFontName="Helvetica-Bold"/>
+				</textElement>
+				<text><![CDATA[Método de Pago:]]></text>
+			</staticText>
+			<textField isStretchWithOverflow="true" pattern="" isBlankWhenNull="false">
+				<reportElement key="textField-12" style="Arial_Normal" mode="Opaque" x="453" y="227" width="110" height="12" forecolor="#000000" backcolor="#FFFFFF" uuid="0915bc1a-9990-48d5-bd1a-a7c3300506d8"/>
+				<textElement textAlignment="Left" verticalAlignment="Top">
+					<font size="8"/>
+					<paragraph lineSpacing="Single"/>
+				</textElement>
+				<textFieldExpression><![CDATA[$P{METODO_PAGO}]]></textFieldExpression>
+			</textField>
+			<staticText>
+				<reportElement key="staticText-36" style="Arial_Normal" x="364" y="240" width="68" height="13" forecolor="#000066" uuid="996a8f4c-aa50-45e5-a091-b3fe57f5373b"/>
+				<textElement>
+					<font size="8" isBold="true" pdfFontName="Helvetica-Bold"/>
+				</textElement>
+				<text><![CDATA[Cuenta de Pago:]]></text>
+			</staticText>
+			<textField isStretchWithOverflow="true" pattern="" isBlankWhenNull="false">
+				<reportElement key="textField-13" style="Arial_Normal" mode="Opaque" x="453" y="240" width="110" height="12" forecolor="#000000" backcolor="#FFFFFF" uuid="1ae760bd-0bcb-47f3-8c00-d4df97a1b583"/>
+				<textElement textAlignment="Left" verticalAlignment="Top">
+					<font size="8"/>
+					<paragraph lineSpacing="Single"/>
+				</textElement>
+				<textFieldExpression><![CDATA[$P{CUENTA_PAGO}]]></textFieldExpression>
+			</textField>
+			<staticText>
+				<reportElement key="staticText-37" style="Arial_Normal" x="187" y="94" width="231" height="22" forecolor="#000066" uuid="66f2e9fa-0c8e-43cc-ad79-251b4eecc0b8"/>
+				<textElement textAlignment="Left">
+					<font fontName="Times New Roman" size="8" isBold="true" isItalic="true" pdfFontName="Helvetica-BoldOblique"/>
+				</textElement>
+				<text><![CDATA[ email: guadalupe.rodriguez@confeccionesvilan.com.mx]]></text>
+			</staticText>
+			<staticText>
+				<reportElement key="staticText-33" style="Arial_Normal" x="364" y="149" width="118" height="10" forecolor="#000066" uuid="e9075e5b-8a38-4a71-9cd1-5386dc35e1ff"/>
+				<textElement>
+					<font size="8" isBold="true" pdfFontName="Helvetica-Bold"/>
+				</textElement>
+				<text><![CDATA[Fecha y Hora de Certificación:]]></text>
+			</staticText>
+			<staticText>
+				<reportElement key="staticText-33" style="Arial_Normal" x="364" y="166" width="118" height="10" forecolor="#000066" uuid="74b273ac-add1-4b3a-88e0-8efe719438d4"/>
+				<textElement>
+					<font size="8" isBold="true" pdfFontName="Helvetica-Bold"/>
+				</textElement>
+				<text><![CDATA[Fecha y Hora de Emisión:]]></text>
+			</staticText>
+			<textField pattern="" isBlankWhenNull="false">
+				<reportElement key="textField" style="Arial_Normal" mode="Opaque" x="485" y="166" width="102" height="12" forecolor="#000000" backcolor="#FFFFFF" uuid="58a20f74-bd4c-4e23-8762-6abf6d4888f0"/>
+				<textElement textAlignment="Left" verticalAlignment="Middle">
+					<font size="8" isBold="true"/>
+					<paragraph lineSpacing="Single"/>
+				</textElement>
+				<textFieldExpression><![CDATA[$P{FECHA_HORA_EMISION}]]></textFieldExpression>
+			</textField>
+			<staticText>
+				<reportElement key="staticText-18" style="Arial_Normal" x="15" y="145" width="68" height="11" forecolor="#000066" uuid="9483f02c-7ef4-4c04-9a81-9550429747b1"/>
+				<textElement>
+					<font size="8" isBold="true" pdfFontName="Helvetica-Bold"/>
+				</textElement>
+				<text><![CDATA[Regimen Fiscal:]]></text>
+			</staticText>
+			<staticText>
+				<reportElement key="staticText-18" style="Arial_Normal" x="15" y="159" width="87" height="11" forecolor="#000066" uuid="e02b002b-afd3-46c5-a9af-e2fa7e8175e3"/>
+				<textElement>
+					<font size="8" isBold="true" pdfFontName="Helvetica-Bold"/>
+				</textElement>
+				<text><![CDATA[Lugar de Expedición:]]></text>
+			</staticText>
+			<textField isStretchWithOverflow="true" pattern="" isBlankWhenNull="false">
+				<reportElement key="textField-6" style="Arial_Normal" mode="Opaque" x="104" y="160" width="241" height="12" forecolor="#000000" backcolor="#FFFFFF" uuid="da08485b-37ad-48f4-9e74-81888e2d71a0"/>
+				<textElement textAlignment="Left" verticalAlignment="Top">
+					<font size="8"/>
+					<paragraph lineSpacing="Single"/>
+				</textElement>
+				<textFieldExpression><![CDATA[$P{LUGAR_EXPEDICION}]]></textFieldExpression>
+			</textField>
+			<textField isStretchWithOverflow="true" pattern="" isBlankWhenNull="false">
+				<reportElement key="textField-6" style="Arial_Normal" mode="Opaque" x="83" y="144" width="262" height="12" forecolor="#000000" backcolor="#FFFFFF" uuid="5560fe9b-32e6-4fb8-a2f6-8d5a3ab39fd6"/>
+				<textElement textAlignment="Left" verticalAlignment="Top">
+					<font size="8"/>
+					<paragraph lineSpacing="Single"/>
+				</textElement>
+				<textFieldExpression><![CDATA[$P{REGIMEN_FISCAL}]]></textFieldExpression>
+			</textField>
+			<rectangle radius="4">
+				<reportElement key="rectangle-10" x="9" y="270" width="579" height="29" forecolor="#CCCCCC" uuid="6ee71411-f591-495a-aece-c3a83afa3ae2"/>
+			</rectangle>
+			<staticText>
+				<reportElement key="staticText-11" style="Arial_Normal" x="15" y="270" width="97" height="13" forecolor="#000066" uuid="caa3aa15-cd86-47bd-ac60-31764f05a05d"/>
+				<textElement>
+					<font size="8" isBold="true" pdfFontName="Helvetica-Bold"/>
+				</textElement>
+				<text><![CDATA[Datos de la Transacción]]></text>
+			</staticText>
+			<staticText>
+				<reportElement key="staticText-28" style="Arial_Normal" x="529" y="283" width="33" height="13" forecolor="#000066" uuid="7cd729d3-a44d-41c8-a88e-54cae2786d53"/>
+				<textElement>
+					<font size="8" isBold="true" pdfFontName="Helvetica-Bold"/>
+				</textElement>
+				<text><![CDATA[Importe]]></text>
+			</staticText>
+			<staticText>
+				<reportElement key="staticText-27" style="Arial_Normal" x="451" y="283" width="27" height="13" forecolor="#000066" uuid="90047843-712d-44ea-908a-5d0752965e86"/>
+				<textElement>
+					<font size="8" isBold="true" pdfFontName="Helvetica-Bold"/>
+				</textElement>
+				<text><![CDATA[Precio]]></text>
+			</staticText>
+			<staticText>
+				<reportElement key="staticText-26" style="Arial_Normal" x="170" y="283" width="50" height="13" forecolor="#000066" uuid="03119442-bd9b-48b6-a128-366c24fe2899"/>
+				<textElement>
+					<font size="8" isBold="true" pdfFontName="Helvetica-Bold"/>
+				</textElement>
+				<text><![CDATA[Descripción]]></text>
+			</staticText>
+			<staticText>
+				<reportElement key="staticText-29" style="Arial_Normal" x="98" y="283" width="30" height="13" forecolor="#000066" uuid="7a5c24d1-22e0-43c5-b21a-1913a09ff4a7"/>
+				<textElement>
+					<font size="8" isBold="true" pdfFontName="Helvetica-Bold"/>
+				</textElement>
+				<text><![CDATA[Código]]></text>
+			</staticText>
+			<staticText>
+				<reportElement key="staticText-29" style="Arial_Normal" x="62" y="283" width="30" height="13" forecolor="#000066" uuid="2cfb8e8a-8339-458c-9040-199c1cdc5480"/>
+				<textElement>
+					<font size="8" isBold="true" pdfFontName="Helvetica-Bold"/>
+				</textElement>
+				<text><![CDATA[Unidad]]></text>
+			</staticText>
+			<staticText>
+				<reportElement key="staticText-25" style="Arial_Normal" x="15" y="283" width="35" height="13" forecolor="#000066" uuid="6ed725ee-4232-4401-b661-91550128a710"/>
+				<textElement>
+					<font size="8" isBold="true" pdfFontName="Helvetica-Bold"/>
+				</textElement>
+				<text><![CDATA[Cantidad]]></text>
+			</staticText>
+		</band>
+	</pageHeader>
+	<columnHeader>
+		<band splitType="Stretch"/>
+	</columnHeader>
+	<detail>
+		<band height="11" splitType="Stretch">
+			<textField isStretchWithOverflow="true" pattern="#,##0.00" isBlankWhenNull="false">
+				<reportElement key="textField" style="Arial_Normal" stretchType="RelativeToBandHeight" mode="Opaque" x="515" y="3" width="55" height="7" forecolor="#000000" backcolor="#FFFFFF" uuid="bc9fb947-3630-4b43-b0e5-e61a572ad7b5"/>
+				<textElement textAlignment="Right" verticalAlignment="Middle">
+					<font size="5"/>
+					<paragraph lineSpacing="Single"/>
+				</textElement>
+				<textFieldExpression><![CDATA[$F{IMPORTE}]]></textFieldExpression>
+			</textField>
+			<textField isStretchWithOverflow="true" pattern=" #,##0" isBlankWhenNull="false">
+				<reportElement key="textField" style="Arial_Normal" stretchType="RelativeToBandHeight" mode="Opaque" x="18" y="3" width="16" height="7" forecolor="#000000" backcolor="#FFFFFF" uuid="78e3808e-ba63-4cf3-beec-1a8c13354338"/>
+				<textElement textAlignment="Right" verticalAlignment="Middle">
+					<font size="5"/>
+					<paragraph lineSpacing="Single"/>
+				</textElement>
+				<textFieldExpression><![CDATA[$F{CANTIDAD}]]></textFieldExpression>
+			</textField>
+			<textField isStretchWithOverflow="true" pattern="#,##0.00" isBlankWhenNull="false">
+				<reportElement key="textField" style="Arial_Normal" stretchType="RelativeToBandHeight" mode="Opaque" x="419" y="2" width="60" height="7" forecolor="#000000" backcolor="#FFFFFF" uuid="a1b66743-2f08-47da-8dba-acf766b4d458"/>
+				<textElement textAlignment="Right" verticalAlignment="Middle">
+					<font size="5"/>
+					<paragraph lineSpacing="Single"/>
+				</textElement>
+				<textFieldExpression><![CDATA[$F{PRECIO}]]></textFieldExpression>
+			</textField>
+			<textField isStretchWithOverflow="true" pattern="" isBlankWhenNull="false">
+				<reportElement key="textField" style="Arial_Normal" stretchType="RelativeToBandHeight" mode="Opaque" x="98" y="3" width="43" height="7" forecolor="#000000" backcolor="#FFFFFF" uuid="783d81a4-a09b-41cd-ad25-bd6bf7d68496"/>
+				<textElement textAlignment="Left" verticalAlignment="Middle">
+					<font size="5"/>
+					<paragraph lineSpacing="Single"/>
+				</textElement>
+				<textFieldExpression><![CDATA[$F{NO_PARTE}]]></textFieldExpression>
+			</textField>
+			<textField isStretchWithOverflow="true" pattern="" isBlankWhenNull="false">
+				<reportElement key="textField" style="Arial_Normal" stretchType="RelativeToBandHeight" mode="Opaque" x="170" y="4" width="249" height="7" forecolor="#000000" backcolor="#FFFFFF" uuid="f1d6f5c4-720b-4f17-9c4a-76bb12586349"/>
+				<textElement textAlignment="Left" verticalAlignment="Top">
+					<font size="5"/>
+					<paragraph lineSpacing="Single"/>
+				</textElement>
+				<textFieldExpression><![CDATA[$F{DESCRIPCION}]]></textFieldExpression>
+			</textField>
+			<textField isStretchWithOverflow="true" pattern="" isBlankWhenNull="false">
+				<reportElement key="textField" style="Arial_Normal" stretchType="RelativeToBandHeight" mode="Opaque" x="62" y="3" width="30" height="7" forecolor="#000000" backcolor="#FFFFFF" uuid="e6cc2146-4309-4a95-b353-0fe1c53a54ab"/>
+				<textElement textAlignment="Left" verticalAlignment="Middle">
+					<font size="5"/>
+					<paragraph lineSpacing="Single"/>
+				</textElement>
+				<textFieldExpression><![CDATA[$F{UNIDAD}]]></textFieldExpression>
+			</textField>
+		</band>
+	</detail>
+	<columnFooter>
+		<band splitType="Stretch"/>
+	</columnFooter>
+	<pageFooter>
+		<band height="252" splitType="Stretch">
+			<staticText>
+				<reportElement key="staticText-6" style="Arial_Normal" x="14" y="242" width="573" height="10" forecolor="#000066" uuid="42daeab2-989f-46f7-95a4-b96cb921103f"/>
+				<textElement>
+					<font size="6" isBold="false" pdfFontName="Helvetica-Bold"/>
+				</textElement>
+				<text><![CDATA[ESTE DOCUMENTO ES UNA REPRESENTACIÓN IMPRESA DE UN CFDI]]></text>
+			</staticText>
+			<rectangle radius="4">
+				<reportElement key="rectangle-9" x="10" y="129" width="576" height="103" forecolor="#CCCCCC" uuid="250600d4-97bf-4925-bd6c-1c0695b14b34"/>
+			</rectangle>
+			<rectangle radius="4">
+				<reportElement key="rectangle-6" x="104" y="30" width="353" height="52" forecolor="#CCCCCC" uuid="05760632-cc2f-4d97-a260-79d7325ffcba"/>
+			</rectangle>
+			<rectangle radius="4">
+				<reportElement key="rectangle-5" x="465" y="30" width="121" height="52" forecolor="#CCCCCC" uuid="155c06c0-d03a-44db-b6ad-aa7ac60c9bd5"/>
+			</rectangle>
+			<textField evaluationTime="Page" pattern="#,##0.00" isBlankWhenNull="false">
+				<reportElement key="textField" style="Arial_Normal" mode="Opaque" x="523" y="37" width="60" height="10" forecolor="#000000" backcolor="#FFFFFF" uuid="2b3b7324-971e-48fe-b8bd-8909df28004e"/>
+				<textElement textAlignment="Right" verticalAlignment="Top">
+					<font size="8"/>
+					<paragraph lineSpacing="Single"/>
+				</textElement>
+				<textFieldExpression><![CDATA[$V{SUBTOTAL}]]></textFieldExpression>
+			</textField>
+			<textField evaluationTime="Page" pattern="#,##0.00" isBlankWhenNull="false">
+				<reportElement key="textField" style="Arial_Normal" mode="Opaque" x="523" y="49" width="60" height="11" forecolor="#000000" backcolor="#FFFFFF" uuid="54301806-aeba-4fdb-b24a-4ce617b3df14"/>
+				<textElement textAlignment="Right" verticalAlignment="Top">
+					<font size="8"/>
+					<paragraph lineSpacing="Single"/>
+				</textElement>
+				<textFieldExpression><![CDATA[$V{IVA}]]></textFieldExpression>
+			</textField>
+			<textField isStretchWithOverflow="true" evaluationTime="Report" pattern="" isBlankWhenNull="false">
+				<reportElement key="textField" style="Arial_Normal" mode="Opaque" x="111" y="49" width="340" height="25" forecolor="#000000" backcolor="#FFFFFF" uuid="7978db09-27bf-4de8-a5cc-7ac8c3788828"/>
+				<textElement textAlignment="Left" verticalAlignment="Top">
+					<font size="9"/>
+					<paragraph lineSpacing="Single"/>
+				</textElement>
+				<textFieldExpression><![CDATA[$P{REPORT_SCRIPTLET}.cantidadLetra()]]></textFieldExpression>
+			</textField>
+			<textField evaluationTime="Page" pattern="#,##0.00" isBlankWhenNull="false">
+				<reportElement key="textField" style="Arial_Normal" mode="Opaque" x="523" y="62" width="60" height="12" forecolor="#000000" backcolor="#FFFFFF" uuid="15d0ae23-af7f-4673-b316-d83582142ede"/>
+				<textElement textAlignment="Right" verticalAlignment="Top">
+					<font size="8"/>
+					<paragraph lineSpacing="Single"/>
+				</textElement>
+				<textFieldExpression><![CDATA[$V{TOTAL}]]></textFieldExpression>
+			</textField>
+			<staticText>
+				<reportElement key="staticText-4" style="Arial_Normal" x="13" y="152" width="68" height="10" forecolor="#000066" uuid="d07c1271-cc23-4764-a766-5963d12edc7b"/>
+				<textElement>
+					<font size="8" isBold="true" pdfFontName="Helvetica-Bold"/>
+				</textElement>
+				<text><![CDATA[Sello Digital SAT:]]></text>
+			</staticText>
+			<staticText>
+				<reportElement key="staticText-5" style="Arial_Normal" x="14" y="132" width="70" height="10" forecolor="#000066" uuid="b2dcf38a-4325-4faf-b8c2-7b4e3dfff677"/>
+				<textElement>
+					<font size="8" isBold="true" pdfFontName="Helvetica-Bold"/>
+				</textElement>
+				<text><![CDATA[Sello Digital CFDI:]]></text>
+			</staticText>
+			<staticText>
+				<reportElement key="staticText-7" style="Arial_Normal" x="111" y="34" width="97" height="13" forecolor="#000066" uuid="353c4bc3-d31e-497e-af4b-def23b078747"/>
+				<textElement>
+					<font size="8" isBold="true" pdfFontName="Helvetica-Bold"/>
+				</textElement>
+				<text><![CDATA[Importe total con letra:]]></text>
+			</staticText>
+			<staticText>
+				<reportElement key="staticText-8" style="Arial_Normal" x="470" y="36" width="36" height="12" forecolor="#000066" uuid="a54c44bc-ccb2-4130-a5ca-dc0cfe6bb93d"/>
+				<textElement>
+					<font size="8" isBold="true" pdfFontName="Helvetica-Bold"/>
+				</textElement>
+				<text><![CDATA[Subtotal:]]></text>
+			</staticText>
+			<staticText>
+				<reportElement key="staticText-9" style="Arial_Normal" x="470" y="49" width="44" height="12" forecolor="#000066" uuid="a9a3b1b2-0eb6-4b6e-b684-e95f95c90773"/>
+				<textElement>
+					<font size="8" isBold="true" pdfFontName="Helvetica-Bold"/>
+				</textElement>
+				<text><![CDATA[IVA (16%):]]></text>
+			</staticText>
+			<staticText>
+				<reportElement key="staticText-10" style="Arial_Normal" x="470" y="62" width="25" height="13" forecolor="#000066" uuid="3cea72ae-876a-4b01-bfde-be2cb7fdcd37"/>
+				<textElement>
+					<font size="8" isBold="true" pdfFontName="Helvetica-Bold"/>
+				</textElement>
+				<text><![CDATA[Total:]]></text>
+			</staticText>
+			<textField isStretchWithOverflow="true" pattern="" isBlankWhenNull="false">
+				<reportElement key="textField-9" style="Arial_Normal" mode="Opaque" x="84" y="152" width="493" height="20" forecolor="#000000" backcolor="#FFFFFF" uuid="891ceade-81e2-4dae-8aa8-1be810d265de"/>
+				<textElement textAlignment="Left" verticalAlignment="Top">
+					<font size="6"/>
+					<paragraph lineSpacing="Single"/>
+				</textElement>
+				<textFieldExpression><![CDATA[$P{SELLO_DIGITAL_SAT}]]></textFieldExpression>
+			</textField>
+			<textField isStretchWithOverflow="true" pattern="" isBlankWhenNull="false">
+				<reportElement key="textField-10" style="Arial_Normal" mode="Opaque" x="84" y="132" width="493" height="20" forecolor="#000000" backcolor="#FFFFFF" uuid="76c21b76-b8fc-412f-915d-dee0bce213bb"/>
+				<textElement textAlignment="Left" verticalAlignment="Top">
+					<font size="6"/>
+					<paragraph lineSpacing="Single"/>
+				</textElement>
+				<textFieldExpression><![CDATA[$P{SELLO_DIGITAL_EMISOR}]]></textFieldExpression>
+			</textField>
+			<image>
+				<reportElement key="image-1" mode="Transparent" x="12" y="30" width="90" height="92" isRemoveLineWhenBlank="true" uuid="eedf211f-cb14-4046-94f3-a97f19936cfe"/>
+				<imageExpression><![CDATA[$P{CBB}]]></imageExpression>
+			</image>
+			<staticText>
+				<reportElement key="staticText-4" style="Arial_Normal" x="12" y="172" width="255" height="10" forecolor="#000066" uuid="d4240bc5-e71d-4a58-9201-c39f6dda9d72"/>
+				<textElement>
+					<font size="8" isBold="true" pdfFontName="Helvetica-Bold"/>
+				</textElement>
+				<text><![CDATA[Cadena original del complemento de certificación digital del SAT:]]></text>
+			</staticText>
+			<textField isStretchWithOverflow="true" pattern="" isBlankWhenNull="false">
+				<reportElement key="textField-10" style="Arial_Normal" mode="Opaque" x="14" y="182" width="563" height="39" forecolor="#000000" backcolor="#FFFFFF" uuid="fbcc65e1-08ee-4899-b3e4-f58ffe9384e5"/>
+				<textElement textAlignment="Left" verticalAlignment="Top">
+					<font size="6"/>
+					<paragraph lineSpacing="Single"/>
+				</textElement>
+				<textFieldExpression><![CDATA[$P{CADENA_ORIGINAL}]]></textFieldExpression>
+			</textField>
+		</band>
+	</pageFooter>
+	<summary>
+		<band splitType="Stretch"/>
+	</summary>
+</jasperReport>

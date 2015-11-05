@@ -1,0 +1,19 @@
+.body { font-family: arial; font-size: 11px; font-style: normal; line-height: normal; color: #4A4A4A; text-align: justify} 
+.ligas{font-family : arial; font-size: 11px; font-style : bold; color : #003366; text-decoration : none;} 
+.ligas:hover{font-family : arial; font-size : 11px; font-style : bold; color : #CC0033; text-decoration: underline;} 
+.titulos{font-family: arial;font-size: 12px;font-style: bold;line-height: bold;color: Rgb(0,51,102);text-align: justify}
+.encabezados{ font-family: arial; font-size: 12px; font-style: bold; line-height: normal; color: #333333; }
+.tablatext{ font-family: arial; font-size: 11px; font-style: normal; line-height: normal; color: #4A4A4A;} 
+.msg{ font-family: arial; font-size: 11px; font-style: normal; line-height: normal; color: red} 
+.titulosnet{ font-family: arial; font-size: 12px; font-style: bold; line-height: normal; color: #CC0000;}
+.titulostabla{ font-family: arial; font-size: 12px; font-style: bold; line-height: normal; color: #FFFFFF;}
+.itemBorder { border: 1px solid black }
+.itemText { font-family: arial; font-size: 11px; font-style: normal; line-height: normal; color: #000000; text-decoration: none; }
+.crazyBorder { border: 10px solid black }
+.crazyText { text-decoration: none; color: #FFFFFF; font: 11px verdana }
+.itemStyle TD {	color:Black;}
+.numero { font-family: arial; font-size: 11px; font-style: normal; line-height: normal; color: #4A4A4A; text-align:right} 
+.alternatingItemStyle TD {background-color: #EAEDF1;border-bottom: solid 1px #CAD1D9;}
+.headerStyle TD {background-color: #E3EAF2;	color:#364859; border-bottom: solid 1px #364859;}
+.titStyle TD {background-color: #E3EAF2;color:#364859;border-bottom: solid 1px #364859;	border-top : 1px solid #364859;}
+.tititemStyle TD {color:Black; border-bottom: solid 1px #364859;	border-top : 1px solid #364859;}

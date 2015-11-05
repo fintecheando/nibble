@@ -1,0 +1,222 @@
+<?xml version="1.0" encoding="UTF-8"  ?>
+<!-- Created with iReport - A designer for JasperReports -->
+<!DOCTYPE jasperReport PUBLIC "//JasperReports//DTD Report Design//EN" "http://jasperreports.sourceforge.net/dtds/jasperreport.dtd">
+<jasperReport
+		 name="valua_inv_clasi_part"
+		 columnCount="1"
+		 printOrder="Vertical"
+		 orientation="Landscape"
+		 pageWidth="842"
+		 pageHeight="595"
+		 columnWidth="842"
+		 columnSpacing="0"
+		 leftMargin="0"
+		 rightMargin="0"
+		 topMargin="0"
+		 bottomMargin="0"
+		 whenNoDataType="NoPages"
+		 isTitleNewPage="false"
+		 isSummaryNewPage="false">
+	<reportFont name="Arial_Normal" isDefault="true" fontName="Arial" size="8" isBold="false" isItalic="false" isUnderline="false" isStrikeThrough="false" pdfFontName="Helvetica" pdfEncoding="Cp1252" isPdfEmbedded="false"/>
+	<reportFont name="Arial_Bold" isDefault="false" fontName="Arial" size="8" isBold="true" isItalic="false" isUnderline="false" isStrikeThrough="false" pdfFontName="Helvetica-Bold" pdfEncoding="Cp1252" isPdfEmbedded="false"/>
+	<reportFont name="Arial_Italic" isDefault="false" fontName="Arial" size="8" isBold="false" isItalic="true" isUnderline="false" isStrikeThrough="false" pdfFontName="Helvetica-Oblique" pdfEncoding="Cp1252" isPdfEmbedded="false"/>
+	<parameter name="FECHA" isForPrompting="false" class="java.lang.String">
+		<parameterDescription><![CDATA[FECHA ACTUAL]]></parameterDescription>
+	</parameter>
+		<background>
+			<band height="0"  isSplitAllowed="true" >
+			</band>
+		</background>
+		<title>
+			<band height="68"  isSplitAllowed="true" >
+				<staticText>
+					<reportElement
+						mode="Opaque"
+						x="285"
+						y="13"
+						width="252"
+						height="18"
+						forecolor="#000000"
+						backcolor="#FFFFFF"
+						positionType="FixRelativeToTop"
+						isPrintRepeatedValues="true"
+						isRemoveLineWhenBlank="false"
+						isPrintInFirstWholeBand="false"
+						isPrintWhenDetailOverflows="false"/>
+					<textElement textAlignment="Left" verticalAlignment="Top" lineSpacing="Single">
+						<font reportFont="Arial_Bold" size="10"/>
+					</textElement>
+				<text><![CDATA[Valuación de Inventarios por Clasificación y Parte]]></text>
+				</staticText>
+				<rectangle radius="0" >
+					<reportElement
+						mode="Opaque"
+						x="725"
+						y="23"
+						width="75"
+						height="18"
+						forecolor="#000000"
+						backcolor="#000000"
+						positionType="FixRelativeToTop"
+						isPrintRepeatedValues="true"
+						isRemoveLineWhenBlank="false"
+						isPrintInFirstWholeBand="false"
+						isPrintWhenDetailOverflows="false"/>
+					<graphicElement stretchType="NoStretch" pen="Thin" fill="Solid" />
+				</rectangle>
+				<staticText>
+					<reportElement
+						mode="Opaque"
+						x="747"
+						y="26"
+						width="37"
+						height="13"
+						forecolor="#FFFFFF"
+						backcolor="#000000"
+						positionType="FixRelativeToTop"
+						isPrintRepeatedValues="true"
+						isRemoveLineWhenBlank="false"
+						isPrintInFirstWholeBand="false"
+						isPrintWhenDetailOverflows="false"/>
+					<textElement textAlignment="Left" verticalAlignment="Top" lineSpacing="Single">
+						<font reportFont="Arial_Italic" size="10"/>
+					</textElement>
+				<text><![CDATA[Fecha:]]></text>
+				</staticText>
+				<textField isStretchWithOverflow="false" pattern="" isBlankWhenNull="false" evaluationTime="Now" hyperlinkType="None" >					<reportElement
+						mode="Opaque"
+						x="730"
+						y="45"
+						width="66"
+						height="14"
+						forecolor="#000000"
+						backcolor="#FFFFFF"
+						positionType="FixRelativeToTop"
+						isPrintRepeatedValues="true"
+						isRemoveLineWhenBlank="false"
+						isPrintInFirstWholeBand="false"
+						isPrintWhenDetailOverflows="false"/>
+					<textElement textAlignment="Left" verticalAlignment="Top" lineSpacing="Single">
+						<font reportFont="Arial_Italic" size="10"/>
+					</textElement>
+				<textFieldExpression   class="java.lang.String"><![CDATA[$P{FECHA}]]></textFieldExpression>
+				</textField>
+			</band>
+		</title>
+		<pageHeader>
+			<band height="24"  isSplitAllowed="true" >
+				<staticText>
+					<reportElement
+						mode="Opaque"
+						x="4"
+						y="7"
+						width="68"
+						height="14"
+						forecolor="#000000"
+						backcolor="#FFFFFF"
+						positionType="FixRelativeToTop"
+						isPrintRepeatedValues="true"
+						isRemoveLineWhenBlank="false"
+						isPrintInFirstWholeBand="false"
+						isPrintWhenDetailOverflows="false"/>
+					<textElement textAlignment="Left" verticalAlignment="Top" lineSpacing="Single">
+						<font reportFont="Arial_Italic" size="10"/>
+					</textElement>
+				<text><![CDATA[Clasificación: ]]></text>
+				</staticText>
+			</band>
+		</pageHeader>
+		<columnHeader>
+			<band height="30"  isSplitAllowed="true" >
+				<rectangle radius="0" >
+					<reportElement
+						mode="Opaque"
+						x="2"
+						y="4"
+						width="818"
+						height="23"
+						forecolor="#000000"
+						backcolor="#000000"
+						positionType="FixRelativeToTop"
+						isPrintRepeatedValues="true"
+						isRemoveLineWhenBlank="false"
+						isPrintInFirstWholeBand="false"
+						isPrintWhenDetailOverflows="false"/>
+					<graphicElement stretchType="NoStretch" pen="Thin" fill="Solid" />
+				</rectangle>
+				<staticText>
+					<reportElement
+						mode="Opaque"
+						x="9"
+						y="7"
+						width="50"
+						height="16"
+						forecolor="#FFFFFF"
+						backcolor="#000000"
+						positionType="FixRelativeToTop"
+						isPrintRepeatedValues="true"
+						isRemoveLineWhenBlank="false"
+						isPrintInFirstWholeBand="false"
+						isPrintWhenDetailOverflows="false"/>
+					<textElement textAlignment="Left" verticalAlignment="Top" lineSpacing="Single">
+						<font reportFont="Arial_Italic" size="10"/>
+					</textElement>
+				<text><![CDATA[No. Parte]]></text>
+				</staticText>
+				<staticText>
+					<reportElement
+						mode="Opaque"
+						x="157"
+						y="7"
+						width="57"
+						height="15"
+						forecolor="#FFFFFF"
+						backcolor="#000000"
+						positionType="FixRelativeToTop"
+						isPrintRepeatedValues="true"
+						isRemoveLineWhenBlank="false"
+						isPrintInFirstWholeBand="false"
+						isPrintWhenDetailOverflows="false"/>
+					<textElement textAlignment="Left" verticalAlignment="Top" lineSpacing="Single">
+						<font reportFont="Arial_Italic" size="10"/>
+					</textElement>
+				<text><![CDATA[Descripción]]></text>
+				</staticText>
+				<staticText>
+					<reportElement
+						mode="Opaque"
+						x="311"
+						y="9"
+						width="60"
+						height="14"
+						forecolor="#FFFFFF"
+						backcolor="#000000"
+						positionType="FixRelativeToTop"
+						isPrintRepeatedValues="true"
+						isRemoveLineWhenBlank="false"
+						isPrintInFirstWholeBand="false"
+						isPrintWhenDetailOverflows="false"/>
+					<textElement textAlignment="Left" verticalAlignment="Top" lineSpacing="Single">
+						<font reportFont="Arial_Italic" size="10"/>
+					</textElement>
+				<text><![CDATA[Existencias]]></text>
+				</staticText>
+			</band>
+		</columnHeader>
+		<detail>
+			<band height="100"  isSplitAllowed="true" >
+			</band>
+		</detail>
+		<columnFooter>
+			<band height="30"  isSplitAllowed="true" >
+			</band>
+		</columnFooter>
+		<pageFooter>
+			<band height="50"  isSplitAllowed="true" >
+			</band>
+		</pageFooter>
+		<summary>
+			<band height="50"  isSplitAllowed="true" >
+			</band>
+		</summary>
+</jasperReport>

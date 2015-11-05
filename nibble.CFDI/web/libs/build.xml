@@ -1,0 +1,435 @@
+<project name="Modeler" default="compile" basedir=".">
+
+
+<!--
+        "Modeler" component of the Jakarta Commons Subproject
+        $Id: build.xml,v 1.20 2003/07/29 00:50:44 yoavs Exp $
+-->
+
+
+<!-- ========== Initialize Properties ===================================== -->
+
+
+  <property file="${user.home}/build.properties"/>   <!-- User local        -->
+  <property file="build.properties"/>                <!-- Component local   -->
+  <property file="build.properties.default"/>        <!-- Defaults   -->
+  <property file="../build.properties"/>             <!-- Commons local     -->
+
+
+<!-- ========== External Dependencies ===================================== -->
+
+
+  <!-- The directories corresponding to your necessary dependencies -->
+  <property name="base.path"               value="/usr/local" />
+  <property name="jaxp.home"               value="${base.path}/jaxp-1.1"/>
+  <property name="junit.home"              value="${base.path}/junit3.7"/>
+  <property name="commons.home"            location="../../jakarta-commons"/>
+  <property name="sandbox.home"            location="../../jakarta-commons-sandbox"/>
+  <property name="digester.home"           value="${commons.home}/digester"/>
+  <property name="jmx.home"                value="${base.path}/jmx-ri_1.0.1/jmx"/>
+  <property name="logging.home"            value="${commons.home}/logging"/>
+
+<!-- ========== Derived Values ============================================ -->
+
+
+  <!-- The locations of necessary jar files -->
+  <property name="ant.jar"                 value="${ant.home}/lib/ant.jar"/>
+  <property name="jaxp.jaxp.jar"           value="${jaxp.home}/jaxp.jar"/>
+  <property name="jaxp.parser.jar"         value="${jaxp.home}/crimson.jar"/>
+  <property name="jaxp.xalan.jar"          value="${jaxp.home}/xalan.jar"/>
+  <property name="jmx.jar"                 value="${jmx.home}/lib/jmxri.jar"/>
+  <property name="junit.jar"               value="${junit.home}/junit.jar"/>
+  <property name="commons-digester.jar"    value="${digester.home}/dist/commons-digester.jar"/>
+  <property name="commons-logging.jar"     value="${logging.home}/target/commons-logging.jar"/>
+
+
+<!-- ========== Component Declarations ==================================== -->
+
+
+  <!-- The name of this component -->
+  <property name="component.name"          value="modeler"/>
+
+  <!-- The title of this component -->
+  <property name="component.title"         value="Model MBeans Support Package"/>
+
+  <!-- The current version number of this component -->
+  <property name="component.version"       value="1.1"/>
+
+  <!-- The base directory for compilation targets -->
+  <property name="build.home"              value="target"/>
+
+  <!-- The base directory for component configuration files -->
+  <property name="conf.home"               value="src/conf"/>
+
+  <!-- The base directory for distribution targets -->
+  <property name="dist.home"               value="dist"/>
+
+  <!-- The base directory for component sources -->
+  <property name="source.home"             value="src/java"/>
+
+  <!-- The base directory for unit test sources -->
+  <property name="test.home"               value="src/test"/>
+
+  <property name="commons-modeler.jar" value="${dist.home}/commons-${component.name}.jar"/>
+
+<!-- ========== Compiler Defaults ========================================= -->
+
+
+  <!-- Should Java compilations set the 'debug' compiler option? -->
+  <property name="compile.debug"           value="true"/>
+
+  <!-- Should Java compilations set the 'deprecation' compiler option? -->
+  <property name="compile.deprecation"     value="false"/>
+
+  <!-- Should Java compilations set the 'optimize' compiler option? -->
+  <property name="compile.optimize"        value="true"/>
+
+  <!-- Construct compile classpath -->
+  <path id="compile.classpath">
+    <pathelement location="${build.home}/classes"/>
+    <pathelement location="${ant.jar}"/>
+    <pathelement location="${jaxp.jaxp.jar}"/>
+    <pathelement location="${jaxp.parser.jar}"/>
+    <pathelement location="${jaxp.xalan.jar}"/>
+    <pathelement location="${commons-digester.jar}"/>
+    <pathelement location="${commons-logging.jar}"/>
+    <pathelement location="${jmx.jar}"/>
+  </path>
+
+
+<!-- ========== Test Execution Defaults =================================== -->
+
+
+  <!-- Construct unit test classpath -->
+  <path id="test.classpath">
+    <pathelement location="${build.home}/classes"/>
+    <pathelement location="${build.home}/tests"/>
+    <pathelement location="${ant.jar}"/>
+    <pathelement location="${jaxp.jaxp.jar}"/>
+    <pathelement location="${jaxp.parser.jar}"/>
+    <pathelement location="${jaxp.xalan.jar}"/>
+    <pathelement location="${commons-digester.jar}"/>
+    <pathelement location="${commons-logging.jar}"/>
+    <pathelement location="${jmx.jar}"/>
+    <pathelement location="${junit.jar}"/>
+  </path>
+
+  <!-- Should all tests fail if one does? -->
+  <property name="test.failonerror"        value="true"/>
+
+  <!-- The test runner to execute -->
+  <property name="test.runner"             value="junit.textui.TestRunner"/>
+
+
+<!-- ========== Executable Targets ======================================== -->
+
+  <target name="init"
+   description="Initialize and evaluate conditionals">
+    <echo message="-------- ${component.name} ${component.version} --------"/>
+    <filter  token="name"                  value="${component.name}"/>
+    <filter  token="version"               value="${component.version}"/>
+  </target>
+
+
+  <target name="prepare" depends="init"
+   description="Prepare build directory">
+    <mkdir dir="${build.home}"/>
+    <mkdir dir="${build.home}/classes"/>
+    <mkdir dir="${build.home}/conf"/>
+    <mkdir dir="${build.home}/tests"/>
+  </target>
+
+
+  <target name="static" depends="prepare"
+   description="Copy static files to build directory">
+    <tstamp/>
+    <copy  todir="${build.home}/conf" filtering="on">
+      <fileset dir="${conf.home}" includes="*.MF"/>
+    </copy>
+  </target>
+
+
+  <target name="compile-only" >
+    <available property="ant16.available"  classname="org.apache.tools.ant.PropertyHelper" />
+    <available property="digester.available"  classname="org.apache.commons.digester.Digester" />
+
+    <javac  srcdir="${source.home}"
+           destdir="${build.home}/classes"
+             debug="${compile.debug}"
+       deprecation="${compile.deprecation}"
+          optimize="${compile.optimize}">
+      <classpath refid="compile.classpath"/>
+      <exclude name="org/apache/commons/modeler/ant/*PropertyHelper.java" unless="ant16.available" />
+      <exclude name="org/apache/commons/modeler/modules/MbeansDescriptorsDigesterSource.java" unless="digester.available" />
+    </javac>
+    <copy    todir="${build.home}/classes" filtering="on">
+      <fileset dir="${source.home}"
+          excludes="**/*.java org/apache/commons/modeler/demo/**"/>
+    </copy>
+  </target>
+
+  <target name="compile" depends="static,compile-only"
+   description="Compile shareable components" />
+
+  <target name="clean"
+   description="Clean build and distribution directories">
+    <delete    dir="${build.home}"/>
+    <delete    dir="${dist.home}"/>
+  </target>
+
+  <target name="init-dist"
+    description="Create distribution directory">
+    <mkdir      dir="${dist.home}"/>
+  </target>
+
+  <target name="dist-lite" depends="init-dist,compile,jar"
+          description="Dist without javadoc" />
+
+  <target name="all" depends="clean,compile"
+   description="Clean and compile all components"/>
+
+  <target name="javadoc" depends="compile" unless="docs-uptodate"
+   description="Create component Javadoc documentation">
+    <mkdir      dir="${dist.home}"/>
+    <mkdir      dir="${dist.home}/docs"/>
+    <mkdir      dir="${dist.home}/docs/api"/>
+    <javadoc sourcepath="${source.home}"
+                destdir="${dist.home}/docs/api"
+           packagenames="org.apache.commons.*"
+                 author="true"
+                private="true"
+                version="true"
+               doctitle="&lt;h1&gt;${component.title} (Version ${component.version})&lt;/h1&gt;"
+            windowtitle="${component.title} (Version ${component.version})"
+                 bottom="Copyright (c) 2001-2003 - Apache Software Foundation"
+           classpathref="compile.classpath" />
+  </target>
+
+  <target name="jar" depends="compile-only" > 
+    <mkdir      dir="${build.home}/classes/META-INF"/>
+    <copy      file="src/java/org/apache/commons/modeler/ant/ant.properties"
+             tofile="${build.home}/classes/META-INF/ant.properties"/>
+    <copy      file="LICENSE.txt"
+             tofile="${build.home}/classes/META-INF/LICENSE.txt"/>
+    <jar jarfile="${commons-modeler.jar}"
+         index="true"
+         basedir="${build.home}/classes"
+         manifest="src/conf/MANIFEST.MF">
+       <include name="org/apache/commons/modeler/**" />
+       <include name="META-INF/ant.properties" />
+       <include name="META-INF/LICENSE.txt" />
+    </jar>
+  </target>
+
+  <target name="dist" depends="dist-lite,javadoc"
+    description="Create binary distribution">
+    <copy      file="LICENSE.txt"
+              tofile="${dist.home}/LICENSE.txt"/>
+    <copy todir="${dist.home}" >
+       <fileset dir="." includes="RELEASE-NOTES**"/>
+    </copy>
+
+    <!-- some helpers to quickly build -->
+    <copy todir="${dist.home}" >
+       <fileset dir=".">
+           <include name="build.xml"/>
+           <include name="build.properties.sample"/>
+       </fileset>
+    </copy>
+
+    <!-- the src is similar with the JDK sources - and very useful for users of
+         IDEs, where the jar can be "mounted" and used when debugging -->
+    <jar file="${dist.home}/commons-modeler-src.jar">
+         <fileset dir="src/java" includes="**" />        
+         <fileset dir="src/conf" includes="MANIFEST.MF" />
+     </jar>
+ 
+     <copy      file="src/java/org/apache/commons/modeler/mbeans-descriptors.dtd"
+              todir="${dist.home}"/>
+  </target>
+
+  <!-- Experimental for now. If people download the dist, they should be able to 
+       do a quick build and to make small fixes -->
+  <target name="dist-build-prepare" description="Allow dist users to unpack the sources" >
+     <mkdir dir="src/java" />
+     <mkdir dir="src/conf" />
+     <unjar src="commons-modeler-src.jar" dest="src/java" />
+     <copy file="src/java/MANIFEST.MF" todir="src/conf" />
+  </target>
+  
+  <!-- Why is this target here? -->
+  <target name="check-deps" >
+  </target>
+
+  <target name="dist-build"
+    description="Buid target for the dist"
+    depends="dist-build-prepare,check-deps,compile">
+     <antcall target="jar" >
+        <param name="commons-modeler.jar" location="commons-modeler.jar" />
+        <param name="build.home" location="target" />
+     </antcall>
+  </target>
+
+<!-- ========== Unit Test Targets ========================================= -->
+
+
+  <target name="compile.tests" depends="compile"
+   description="Compile unit test cases">
+    <javac  srcdir="${test.home}"
+           destdir="${build.home}/tests"
+             debug="${compile.debug}"
+       deprecation="${compile.deprecation}"
+          optimize="${compile.optimize}">
+      <classpath refid="test.classpath"/>
+    </javac>
+    <copy    todir="${build.home}/tests" filtering="on">
+      <fileset dir="${test.home}" excludes="**/*.java"/>
+    </copy>
+  </target>
+
+
+  <target name="test"  depends="compile.tests,
+                                test.Registry"
+   description="Run all unit test cases">
+  </target>
+
+
+  <target name="test.Registry">
+    <echo message="Running Registry tests ..."/>
+    <java classname="${test.runner}" fork="yes"
+        failonerror="${test.failonerror}">
+      <arg value="org.apache.commons.modeler.RegistryTestCase"/>
+      <classpath refid="test.classpath"/>
+    </java>
+  </target>
+
+<!-- ========== Demonstration Targets ===================================== -->
+
+
+  <target name="demo" depends="compile.tests"
+   description="Run demostration application">
+    <java classname="org.apache.commons.modeler.demo.Demo" fork="yes">
+      <classpath refid="test.classpath"/>
+    </java>
+  </target>
+
+<!-- ========== Release Targets ===================================== -->
+
+  <target name="release" description="Create the release">
+    <property name="ver" value="1.1" />
+    <property name="tag" value="MODELER_1_1" />
+    <delete dir="release" />
+    <mkdir dir="release" />
+    <cvs command="checkout" 
+         package="jakarta-commons/modeler" 
+         cvsroot=":pserver:anoncvs@cvs.apache.org:/home/cvspublic"
+         dest="release" 
+         tag="${tag}"/> 
+    <rename src="release/jakarta-commons/modeler" dest="release/commons-modeler-${ver}-src" />
+    <delete dir="release/jakarta-commons"/>
+    <zip file="release/commons-modeler-${ver}-src.zip" >
+       <fileset dir="release" includes="commons-modeler-${ver}-src/**"/>
+    </zip>
+    <tar  tarfile="release/commons-modeler-${ver}-src.tar" >
+       <tarfileset dir="release" includes="commons-modeler-${ver}-src/**"/>
+    </tar> 
+    <gzip zipfile="release/commons-modeler-${ver}-src.tar.gz" src="release/commons-modeler-${ver}-src.tar"/>
+    <delete file="release/commons-modeler-${ver}-src.tar" />
+
+<!--
+    <ant dir="release/commons-modeler-${ver}-src" target="download" />
+-->
+    
+    <ant dir="release/commons-modeler-${ver}-src" target="dist"  />
+
+    <mkdir dir="release/commons-modeler-${ver}" />
+    <copy todir="release/commons-modeler-${ver}" >
+       <fileset dir="release/commons-modeler-${ver}-src/dist" includes="**"/>
+    </copy>
+    <copy file="release/commons-modeler-${ver}/commons-modeler.jar" tofile="release/commons-modeler-${ver}.jar" />
+    <zip file="release/commons-modeler-${ver}.zip" >
+       <fileset dir="release" includes="commons-modeler-${ver}/**"/>
+    </zip>
+    <tar  tarfile="release/commons-modeler-${ver}.tar" >
+       <tarfileset dir="release" includes="commons-modeler-${ver}/**"/>
+    </tar> 
+    <gzip zipfile="release/commons-modeler-${ver}.tar.gz" src="release/commons-modeler-${ver}.tar"/>
+    <ant dir="release/commons-modeler-${ver}-src" target="test"  />
+    
+  </target>
+
+<!-- ========== Network/Utility Targets ===================================== -->
+
+  <target name="proxyflags" description="Checks whether to use proxy">
+    <!-- check proxy parameters. -->
+    <condition property="useproxy">
+      <equals arg1="${proxy.use}" arg2="on" />
+    </condition>
+  </target>
+
+  <target name="setproxy" if="useproxy"
+    description="Sets the prixy host, port for downloading">
+    <taskdef name="setproxy"
+      classname="org.apache.tools.ant.taskdefs.optional.net.SetProxy" />
+    <setproxy proxyhost="${proxy.host}" proxyport="${proxy.port}"/> 
+    <echo message="Using ${proxy.host}:${proxy.port} to download ${sourcefile}"/>
+  </target>
+
+  <target name="testexist" description="Tests if a file exists">
+    <echo message="Testing  for ${destfile}"/>
+    <available file="${destfile}" property="exist"/>
+  </target>
+
+  <target name="downloadzip"
+    unless="exist"
+    depends="setproxy,testexist"
+    description="Downloads and extracts a package">
+    <!-- Download and extract the package -->
+    <get src="${sourcefile}" dest="${base.path}/file.zip" />
+    <mkdir dir="${destdir}" />
+    <unzip src="${base.path}/file.zip" dest="${destdir}"/>
+    <delete file="${base.path}/file.zip"/>
+  </target>
+
+  <target name="downloadgz" unless="exist" depends="setproxy,testexist">
+    <!-- Download and extract the package -->
+    <get src="${sourcefile}" dest="${base.path}/file.tar.gz" />
+    <gunzip src="${base.path}/file.tar.gz" dest="${base.path}/file.tar"/>
+    <untar src="${base.path}/file.tar" dest="${base.path}"/>
+    <delete file="${base.path}/file.tar"/>
+    <delete file="${base.path}/file.tar.gz"/>
+  </target>
+
+  <target name="downloadfile" unless="exist" depends="setproxy,testexist">
+    <!-- Download extract the file -->
+    <mkdir dir="${destdir}" />
+    <get src="${sourcefile}" dest="${destfile}" />
+  </target>
+
+  <target name="download" depends="proxyflags" 
+          description="Download binary packages" >
+    <mkdir dir="${base.path}" />
+    
+    <antcall target="downloadgz">
+      <param name="sourcefile" value="${commons-logging.loc}"/>
+      <param name="destfile" value="${commons-logging.jar}"/>
+    </antcall>
+    <antcall target="downloadgz">
+      <param name="sourcefile" value="${commons-digester.loc}"/>
+      <param name="destfile" value="${commons-digester.jar}"/>
+    </antcall>
+
+    <antcall target="downloadgz">
+      <param name="sourcefile" value="${jmx.loc}"/>
+      <param name="destfile" value="${jmx.jar}"/>
+    </antcall>
+
+    <antcall target="downloadzip">
+      <param name="sourcefile" value="${junit.loc}"/>
+      <param name="destfile" value="${junit.jar}"/>
+      <param name="destdir" value="${base.path}"/>
+    </antcall>
+
+  </target>
+
+</project>

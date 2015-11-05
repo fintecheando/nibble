@@ -1,0 +1,388 @@
+<?xml version="1.0" encoding="UTF-8"  ?>
+<!-- Created with iReport - A designer for JasperReports -->
+<!DOCTYPE jasperReport PUBLIC "//JasperReports//DTD Report Design//EN" "http://jasperreports.sourceforge.net/dtds/jasperreport.dtd">
+<jasperReport
+		 name="nota"
+		 columnCount="1"
+		 printOrder="Vertical"
+		 orientation="Landscape"
+		 pageWidth="842"
+		 pageHeight="595"
+		 columnWidth="842"
+		 columnSpacing="0"
+		 leftMargin="0"
+		 rightMargin="0"
+		 topMargin="0"
+		 bottomMargin="0"
+		 whenNoDataType="NoPages"
+		 isTitleNewPage="false"
+		 isSummaryNewPage="false">
+	<reportFont name="Arial_Normal" isDefault="true" fontName="Arial" size="8" isBold="false" isItalic="false" isUnderline="false" isStrikeThrough="false" pdfFontName="Helvetica" pdfEncoding="Cp1252" isPdfEmbedded="false"/>
+	<reportFont name="Arial_Bold" isDefault="false" fontName="Arial" size="8" isBold="true" isItalic="false" isUnderline="false" isStrikeThrough="false" pdfFontName="Helvetica-Bold" pdfEncoding="Cp1252" isPdfEmbedded="false"/>
+	<reportFont name="Arial_Italic" isDefault="false" fontName="Arial" size="8" isBold="false" isItalic="true" isUnderline="false" isStrikeThrough="false" pdfFontName="Helvetica-Oblique" pdfEncoding="Cp1252" isPdfEmbedded="false"/>
+	<parameter name="NOMBRE_CLI" isForPrompting="false" class="java.lang.String">
+		<parameterDescription><![CDATA[NOMBRE CLIENTE]]></parameterDescription>
+		<defaultValueExpression><![CDATA[NOMBRE CLIENTE]]></defaultValueExpression>
+	</parameter>
+	<parameter name="DIRECCION_CLI" isForPrompting="false" class="java.lang.String">
+		<parameterDescription><![CDATA[DIRECCION CLIENTE]]></parameterDescription>
+		<defaultValueExpression><![CDATA[DIRECCION CLIENTE]]></defaultValueExpression>
+	</parameter>
+	<parameter name="R_F_C" isForPrompting="false" class="java.lang.String">
+		<parameterDescription><![CDATA[RFC]]></parameterDescription>
+		<defaultValueExpression><![CDATA[RFC]]></defaultValueExpression>
+	</parameter>
+	<parameter name="NOTA_CAR_NO" isForPrompting="false" class="java.lang.Integer">
+		<parameterDescription><![CDATA[NOTA CARGO NO]]></parameterDescription>
+		<defaultValueExpression><![CDATA[NOTA CARGO NO]]></defaultValueExpression>
+	</parameter>
+	<parameter name="FECHA_EXP" isForPrompting="false" class="java.util.Date">
+		<parameterDescription><![CDATA[FECHA DE EXPEDICION]]></parameterDescription>
+	</parameter>
+	<field name="CONCEPTO" class="java.lang.String">
+		<fieldDescription><![CDATA[CONCEPTO]]></fieldDescription>
+	</field>
+	<field name="FECHA_VEN" class="java.lang.String">
+		<fieldDescription><![CDATA[FECHA DE VENCIMIENTO]]></fieldDescription>
+	</field>
+		<background>
+			<band height="0"  isSplitAllowed="true" >
+			</band>
+		</background>
+		<title>
+			<band height="91"  isSplitAllowed="true" >
+				<staticText>
+					<reportElement
+						mode="Opaque"
+						x="401"
+						y="13"
+						width="72"
+						height="21"
+						forecolor="#000000"
+						backcolor="#FFFFFF"
+						positionType="FixRelativeToTop"
+						isPrintRepeatedValues="true"
+						isRemoveLineWhenBlank="false"
+						isPrintInFirstWholeBand="false"
+						isPrintWhenDetailOverflows="false"/>
+					<textElement textAlignment="Left" verticalAlignment="Top" lineSpacing="Single">
+						<font reportFont="Arial_Bold" size="12"/>
+					</textElement>
+				<text><![CDATA[Nota Cargo]]></text>
+				</staticText>
+				<textField isStretchWithOverflow="false" pattern="" isBlankWhenNull="false" evaluationTime="Now" hyperlinkType="None" >					<reportElement
+						mode="Opaque"
+						x="16"
+						y="39"
+						width="199"
+						height="15"
+						forecolor="#000000"
+						backcolor="#FFFFFF"
+						positionType="FixRelativeToTop"
+						isPrintRepeatedValues="true"
+						isRemoveLineWhenBlank="false"
+						isPrintInFirstWholeBand="false"
+						isPrintWhenDetailOverflows="false"/>
+					<textElement textAlignment="Left" verticalAlignment="Top" lineSpacing="Single">
+						<font reportFont="Arial_Bold" size="10"/>
+					</textElement>
+				<textFieldExpression   class="java.lang.String"><![CDATA[$P{RAZON_SOCIAL}]]></textFieldExpression>
+				</textField>
+				<textField isStretchWithOverflow="false" pattern="" isBlankWhenNull="false" evaluationTime="Now" hyperlinkType="None" >					<reportElement
+						mode="Opaque"
+						x="16"
+						y="59"
+						width="198"
+						height="20"
+						forecolor="#000000"
+						backcolor="#FFFFFF"
+						positionType="FixRelativeToTop"
+						isPrintRepeatedValues="true"
+						isRemoveLineWhenBlank="false"
+						isPrintInFirstWholeBand="false"
+						isPrintWhenDetailOverflows="false"/>
+					<textElement textAlignment="Left" verticalAlignment="Top" lineSpacing="Single">
+						<font reportFont="Arial_Bold" size="10"/>
+					</textElement>
+				<textFieldExpression   class="java.lang.String"><![CDATA[$P{DIRECCION}]]></textFieldExpression>
+				</textField>
+			</band>
+		</title>
+		<pageHeader>
+			<band height="25"  isSplitAllowed="true" >
+				<rectangle radius="0" >
+					<reportElement
+						mode="Opaque"
+						x="1"
+						y="5"
+						width="833"
+						height="16"
+						forecolor="#000000"
+						backcolor="#000000"
+						positionType="FixRelativeToTop"
+						isPrintRepeatedValues="true"
+						isRemoveLineWhenBlank="false"
+						isPrintInFirstWholeBand="false"
+						isPrintWhenDetailOverflows="false"/>
+					<graphicElement stretchType="NoStretch" pen="Thin" fill="Solid" />
+				</rectangle>
+				<staticText>
+					<reportElement
+						mode="Opaque"
+						x="59"
+						y="5"
+						width="35"
+						height="15"
+						forecolor="#FFFFFF"
+						backcolor="#000000"
+						positionType="FixRelativeToTop"
+						isPrintRepeatedValues="true"
+						isRemoveLineWhenBlank="false"
+						isPrintInFirstWholeBand="false"
+						isPrintWhenDetailOverflows="false"/>
+					<textElement textAlignment="Left" verticalAlignment="Top" lineSpacing="Single">
+						<font reportFont="Arial_Italic" size="10"/>
+					</textElement>
+				<text><![CDATA[Cliente]]></text>
+				</staticText>
+				<staticText>
+					<reportElement
+						mode="Opaque"
+						x="371"
+						y="6"
+						width="100"
+						height="13"
+						forecolor="#FFFFFF"
+						backcolor="#000000"
+						positionType="FixRelativeToTop"
+						isPrintRepeatedValues="true"
+						isRemoveLineWhenBlank="false"
+						isPrintInFirstWholeBand="false"
+						isPrintWhenDetailOverflows="false"/>
+					<textElement textAlignment="Left" verticalAlignment="Top" lineSpacing="Single">
+						<font reportFont="Arial_Italic" size="10"/>
+					</textElement>
+				<text><![CDATA[Nota de Cargo No.]]></text>
+				</staticText>
+				<staticText>
+					<reportElement
+						mode="Opaque"
+						x="665"
+						y="5"
+						width="103"
+						height="15"
+						forecolor="#FFFFFF"
+						backcolor="#000000"
+						positionType="FixRelativeToTop"
+						isPrintRepeatedValues="true"
+						isRemoveLineWhenBlank="false"
+						isPrintInFirstWholeBand="false"
+						isPrintWhenDetailOverflows="false"/>
+					<textElement textAlignment="Left" verticalAlignment="Top" lineSpacing="Single">
+						<font reportFont="Arial_Italic" size="10"/>
+					</textElement>
+				<text><![CDATA[Fecha de Expedición]]></text>
+				</staticText>
+			</band>
+		</pageHeader>
+		<columnHeader>
+			<band height="102"  isSplitAllowed="true" >
+				<textField isStretchWithOverflow="false" pattern="" isBlankWhenNull="false" evaluationTime="Now" hyperlinkType="None" >					<reportElement
+						mode="Opaque"
+						x="12"
+						y="6"
+						width="239"
+						height="14"
+						forecolor="#000000"
+						backcolor="#FFFFFF"
+						positionType="FixRelativeToTop"
+						isPrintRepeatedValues="true"
+						isRemoveLineWhenBlank="false"
+						isPrintInFirstWholeBand="false"
+						isPrintWhenDetailOverflows="false"/>
+					<textElement textAlignment="Left" verticalAlignment="Top" lineSpacing="Single">
+						<font reportFont="Arial_Italic" size="10"/>
+					</textElement>
+				<textFieldExpression   class="java.lang.String"><![CDATA[$P{NOMBRE_CLI}]]></textFieldExpression>
+				</textField>
+				<textField isStretchWithOverflow="false" pattern="" isBlankWhenNull="false" evaluationTime="Now" hyperlinkType="None" >					<reportElement
+						mode="Opaque"
+						x="13"
+						y="25"
+						width="178"
+						height="29"
+						forecolor="#000000"
+						backcolor="#FFFFFF"
+						positionType="FixRelativeToTop"
+						isPrintRepeatedValues="true"
+						isRemoveLineWhenBlank="false"
+						isPrintInFirstWholeBand="false"
+						isPrintWhenDetailOverflows="false"/>
+					<textElement textAlignment="Left" verticalAlignment="Top" lineSpacing="Single">
+						<font reportFont="Arial_Italic" size="10"/>
+					</textElement>
+				<textFieldExpression   class="java.lang.String"><![CDATA[$P{DIRECCION_CLI}]]></textFieldExpression>
+				</textField>
+				<textField isStretchWithOverflow="false" pattern="" isBlankWhenNull="false" evaluationTime="Now" hyperlinkType="None" >					<reportElement
+						mode="Opaque"
+						x="15"
+						y="59"
+						width="139"
+						height="15"
+						forecolor="#000000"
+						backcolor="#FFFFFF"
+						positionType="FixRelativeToTop"
+						isPrintRepeatedValues="true"
+						isRemoveLineWhenBlank="false"
+						isPrintInFirstWholeBand="false"
+						isPrintWhenDetailOverflows="false"/>
+					<textElement textAlignment="Left" verticalAlignment="Top" lineSpacing="Single">
+						<font reportFont="Arial_Italic" size="10"/>
+					</textElement>
+				<textFieldExpression   class="java.lang.String"><![CDATA[$P{R_F_C}]]></textFieldExpression>
+				</textField>
+				<textField isStretchWithOverflow="false" pattern="" isBlankWhenNull="false" evaluationTime="Now" hyperlinkType="None" >					<reportElement
+						mode="Opaque"
+						x="395"
+						y="6"
+						width="63"
+						height="12"
+						forecolor="#000000"
+						backcolor="#FFFFFF"
+						positionType="FixRelativeToTop"
+						isPrintRepeatedValues="true"
+						isRemoveLineWhenBlank="false"
+						isPrintInFirstWholeBand="false"
+						isPrintWhenDetailOverflows="false"/>
+					<textElement textAlignment="Left" verticalAlignment="Top" lineSpacing="Single">
+						<font reportFont="Arial_Italic" size="10"/>
+					</textElement>
+				<textFieldExpression   class="java.lang.String"><![CDATA[$P{NOTA_CAR_NO}]]></textFieldExpression>
+				</textField>
+				<textField isStretchWithOverflow="false" pattern="" isBlankWhenNull="false" evaluationTime="Now" hyperlinkType="None" >					<reportElement
+						mode="Opaque"
+						x="663"
+						y="6"
+						width="101"
+						height="13"
+						forecolor="#000000"
+						backcolor="#FFFFFF"
+						positionType="FixRelativeToTop"
+						isPrintRepeatedValues="true"
+						isRemoveLineWhenBlank="false"
+						isPrintInFirstWholeBand="false"
+						isPrintWhenDetailOverflows="false"/>
+					<textElement textAlignment="Left" verticalAlignment="Top" lineSpacing="Single">
+						<font reportFont="Arial_Italic" size="10"/>
+					</textElement>
+				<textFieldExpression   class="java.lang.String"><![CDATA[$P{FECHA_EXP}]]></textFieldExpression>
+				</textField>
+				<rectangle radius="0" >
+					<reportElement
+						mode="Opaque"
+						x="3"
+						y="83"
+						width="832"
+						height="17"
+						forecolor="#000000"
+						backcolor="#000000"
+						positionType="FixRelativeToTop"
+						isPrintRepeatedValues="true"
+						isRemoveLineWhenBlank="false"
+						isPrintInFirstWholeBand="false"
+						isPrintWhenDetailOverflows="false"/>
+					<graphicElement stretchType="NoStretch" pen="Thin" fill="Solid" />
+				</rectangle>
+				<staticText>
+					<reportElement
+						mode="Opaque"
+						x="138"
+						y="85"
+						width="54"
+						height="14"
+						forecolor="#FFFFFF"
+						backcolor="#000000"
+						positionType="FixRelativeToTop"
+						isPrintRepeatedValues="true"
+						isRemoveLineWhenBlank="false"
+						isPrintInFirstWholeBand="false"
+						isPrintWhenDetailOverflows="false"/>
+					<textElement textAlignment="Left" verticalAlignment="Top" lineSpacing="Single">
+						<font reportFont="Arial_Italic" size="10"/>
+					</textElement>
+				<text><![CDATA[Concepto]]></text>
+				</staticText>
+				<staticText>
+					<reportElement
+						mode="Opaque"
+						x="668"
+						y="84"
+						width="111"
+						height="14"
+						forecolor="#FFFFFF"
+						backcolor="#000000"
+						positionType="FixRelativeToTop"
+						isPrintRepeatedValues="true"
+						isRemoveLineWhenBlank="false"
+						isPrintInFirstWholeBand="false"
+						isPrintWhenDetailOverflows="false"/>
+					<textElement textAlignment="Left" verticalAlignment="Top" lineSpacing="Single">
+						<font reportFont="Arial_Italic" size="10"/>
+					</textElement>
+				<text><![CDATA[Fecha de Vencimiento]]></text>
+				</staticText>
+			</band>
+		</columnHeader>
+		<detail>
+			<band height="20"  isSplitAllowed="true" >
+				<textField isStretchWithOverflow="false" pattern="" isBlankWhenNull="false" evaluationTime="Now" hyperlinkType="None" >					<reportElement
+						mode="Opaque"
+						x="65"
+						y="2"
+						width="188"
+						height="15"
+						forecolor="#000000"
+						backcolor="#FFFFFF"
+						positionType="FixRelativeToTop"
+						isPrintRepeatedValues="true"
+						isRemoveLineWhenBlank="false"
+						isPrintInFirstWholeBand="false"
+						isPrintWhenDetailOverflows="false"/>
+					<textElement textAlignment="Left" verticalAlignment="Top" lineSpacing="Single">
+						<font reportFont="Arial_Italic" size="10"/>
+					</textElement>
+				<textFieldExpression   class="java.lang.String"><![CDATA[$F{CONCEPTO}]]></textFieldExpression>
+				</textField>
+				<textField isStretchWithOverflow="false" pattern="" isBlankWhenNull="false" evaluationTime="Now" hyperlinkType="None" >					<reportElement
+						mode="Opaque"
+						x="670"
+						y="3"
+						width="109"
+						height="15"
+						forecolor="#000000"
+						backcolor="#FFFFFF"
+						positionType="FixRelativeToTop"
+						isPrintRepeatedValues="true"
+						isRemoveLineWhenBlank="false"
+						isPrintInFirstWholeBand="false"
+						isPrintWhenDetailOverflows="false"/>
+					<textElement textAlignment="Left" verticalAlignment="Top" lineSpacing="Single">
+						<font reportFont="Arial_Italic" size="10"/>
+					</textElement>
+				<textFieldExpression   class="java.lang.String"><![CDATA[$F{FECHA_VEN}]]></textFieldExpression>
+				</textField>
+			</band>
+		</detail>
+		<columnFooter>
+			<band height="64"  isSplitAllowed="true" >
+			</band>
+		</columnFooter>
+		<pageFooter>
+			<band height="50"  isSplitAllowed="true" >
+			</band>
+		</pageFooter>
+		<summary>
+			<band height="50"  isSplitAllowed="true" >
+			</band>
+		</summary>
+</jasperReport>

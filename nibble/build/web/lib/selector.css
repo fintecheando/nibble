@@ -1,0 +1,23 @@
+.SelOff
+{
+	CURSOR: hand;
+	background : White;
+}
+.SelOn
+{
+	CURSOR: hand;
+	background : #E6E6FA;
+}
+
+.Selected
+{
+	CURSOR: hand;
+	background : #E6EFFF;
+	color : #4A4A4A;
+}
+.SelectedOn
+{
+	CURSOR: hand;
+	background : #E6FFFF;
+	color : #4A4A4A;
+}

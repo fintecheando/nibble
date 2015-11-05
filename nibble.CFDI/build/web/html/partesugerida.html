@@ -1,0 +1,39 @@
+<html>
+<head>
+<title>PVA 9.1 Facturar</title>
+<meta http-equiv="Content-Type" content="text/html; charset=iso-8859-1">
+<link href="../lib/estilo.css" rel=STYLESHEET type=text/css>
+<script language=JavaScript>
+function aceptar_onclick(form){
+	if (form.descripcion.value==''){
+		alert ('Debe introducir la descripcion ');
+		return false;
+	}
+	form.submit();
+	window.close();
+}
+</script>
+</head>
+<body>
+<form name=frm action="../SugerirParte">
+<table class="tablatext" width=550 align="center" cellpadding="0" cellspacing="0">
+<tr>
+	<td><img src="../images/tpva9_1.GIF"></td>
+</tr>
+</table>
+<table align=center border=1 borderColor=#364859 cellSpacing=0 class=tablatext rules=cols style="BORDER-BOTTOM: black 1px solid; BORDER-COLLAPSE: collapse; BORDER-LEFT: black 1px solid; BORDER-RIGHT: black 1px solid; BORDER-TOP: black 1px solid; FONT-FAMILY: arial; FONT-SIZE: 11px" width=550>
+  <TR class="titStyle"> 
+	<td colspan=2>Descripcion</td>
+ </tr>  
+ <tr class="itemStyle">
+    <td><input type=text name=descripcion size=80></td>
+ </tr>
+</table>
+<br>
+<table width=550 align="center" border="1" bordercolor="#364859" rules="cols" cellspacing="0" width="550" style="border-color:Black;border-width:1px;border-style:solid;font-family: arial; font-size: 11px;border-collapse:collapse;" class="tablatext">
+<tr class="titStyle">
+	<td align=center><input type="button" class=body value="Aceptar" onclick="return aceptar_onclick(this.form)"></td>
+</tr>
+</table>
+</body>
+</html>

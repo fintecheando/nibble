@@ -1,0 +1,540 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<jasperReport xmlns="http://jasperreports.sourceforge.net/jasperreports" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:schemaLocation="http://jasperreports.sourceforge.net/jasperreports http://jasperreports.sourceforge.net/xsd/jasperreport.xsd" name="factura" pageWidth="612" pageHeight="792" columnWidth="535" leftMargin="9" rightMargin="0" topMargin="20" bottomMargin="20" scriptletClass="org.nibble.util.Scriptlet">
+	<property name="ireport.scriptlethandling" value="2"/>
+	<property name="ireport.encoding" value="UTF-8"/>
+	<property name="ireport.zoom" value="1.5"/>
+	<property name="ireport.x" value="0"/>
+	<property name="ireport.y" value="353"/>
+	<import value="net.sf.jasperreports.engine.*"/>
+	<import value="java.util.*"/>
+	<import value="net.sf.jasperreports.engine.data.*"/>
+	<reportFont name="Arial_Normal" isDefault="true" fontName="Arial" size="8" isBold="false" isItalic="false" isUnderline="false" isStrikeThrough="false" pdfFontName="Helvetica" pdfEncoding="Cp1252" isPdfEmbedded="false"/>
+	<reportFont name="Arial_Bold" isDefault="false" fontName="Arial" size="8" isBold="true" isItalic="false" isUnderline="false" isStrikeThrough="false" pdfFontName="Helvetica-Bold" pdfEncoding="Cp1252" isPdfEmbedded="false"/>
+	<reportFont name="Arial_Italic" isDefault="false" fontName="Arial" size="8" isBold="false" isItalic="true" isUnderline="false" isStrikeThrough="false" pdfFontName="Helvetica-Oblique" pdfEncoding="Cp1252" isPdfEmbedded="false"/>
+	<parameter name="FECHA" class="java.lang.String" isForPrompting="false"/>
+	<parameter name="REFERENCIA" class="java.lang.String" isForPrompting="false"/>
+	<parameter name="FEC_VENC" class="java.lang.String" isForPrompting="false"/>
+	<parameter name="NO_CLIENTE" class="java.lang.String" isForPrompting="false"/>
+	<parameter name="VENDEDOR" class="java.lang.String" isForPrompting="false"/>
+	<parameter name="PEDIDO" class="java.lang.String" isForPrompting="false"/>
+	<parameter name="CONDICIONES" class="java.lang.String" isForPrompting="false"/>
+	<parameter name="TRANSPORTE" class="java.lang.String" isForPrompting="false"/>
+	<parameter name="F_IVA" class="java.lang.Double" isForPrompting="false"/>
+	<parameter name="PDESCUENTO" class="java.lang.Double" isForPrompting="false"/>
+	<parameter name="RAZON_SOCIAL" class="java.lang.String" isForPrompting="false"/>
+	<parameter name="CALLE" class="java.lang.String" isForPrompting="false"/>
+	<parameter name="COLONIA" class="java.lang.String" isForPrompting="false"/>
+	<parameter name="R_F_C" class="java.lang.String" isForPrompting="false"/>
+	<parameter name="C_P" class="java.lang.String" isForPrompting="false"/>
+	<parameter name="ESTADO" class="java.lang.String" isForPrompting="false"/>
+	<parameter name="TELEFONO" class="java.lang.String" isForPrompting="false"/>
+	<parameter name="MUNICIPIO" class="java.lang.String" isForPrompting="false"/>
+	<parameter name="SERIE_CERTIFICADO" class="java.lang.String" isForPrompting="false"/>
+	<parameter name="SERIE" class="java.lang.String" isForPrompting="false"/>
+	<parameter name="FOLIO" class="java.lang.String" isForPrompting="false"/>
+	<parameter name="ANO_APROBACION" class="java.lang.String" isForPrompting="false"/>
+	<parameter name="NUM_APROBACION" class="java.lang.String" isForPrompting="false"/>
+	<parameter name="FOLIO_FAC" class="java.lang.String" isForPrompting="false"/>
+	<parameter name="FORMA_PAGO" class="java.lang.String" isForPrompting="false"/>
+	<parameter name="CADENA_ORIGINAL" class="java.lang.String" isForPrompting="false"/>
+	<parameter name="SELLO_DIGITAL_EMISOR" class="java.lang.String" isForPrompting="false"/>
+	<parameter name="NOM_EMISOR" class="java.lang.String" isForPrompting="false"/>
+	<parameter name="RFC_EMISOR" class="java.lang.String" isForPrompting="false"/>
+	<parameter name="DOM_EMISOR" class="java.lang.String" isForPrompting="false"/>
+	<parameter name="DOM_RECEPTOR" class="java.lang.String" isForPrompting="false"/>
+	<parameter name="LOGO" class="java.lang.Object" isForPrompting="false"/>
+	<field name="CANTIDAD" class="java.lang.Integer"/>
+	<field name="UNIDAD" class="java.lang.String"/>
+	<field name="NO_PARTE" class="java.lang.String"/>
+	<field name="DESCRIPCION" class="java.lang.String"/>
+	<field name="NIVEL" class="java.lang.String"/>
+	<field name="PRECIO" class="java.lang.Double"/>
+	<field name="IMPORTE" class="java.lang.Double"/>
+	<field name="FOLIO" class="java.lang.Integer"/>
+	<variable name="SUBTOTAL" class="java.lang.Double" resetType="Group" resetGroup="FOLIO" calculation="Sum">
+		<variableExpression><![CDATA[$F{IMPORTE}]]></variableExpression>
+		<initialValueExpression><![CDATA[new Double(0.0)]]></initialValueExpression>
+	</variable>
+	<variable name="IVA" class="java.lang.Double" resetType="Page">
+		<variableExpression><![CDATA[new Double(($P{F_IVA}).doubleValue()*($V{SUBTOTAL}).doubleValue()/100)]]></variableExpression>
+		<initialValueExpression><![CDATA[new Double(0.0)]]></initialValueExpression>
+	</variable>
+	<variable name="DESCUENTO" class="java.lang.Double" resetType="Group" resetGroup="FOLIO">
+		<variableExpression><![CDATA[new Double(($V{SUBTOTAL}).doubleValue()*($P{PDESCUENTO}).doubleValue()/100)]]></variableExpression>
+		<initialValueExpression><![CDATA[new Double(0.0)]]></initialValueExpression>
+	</variable>
+	<variable name="TOTAL" class="java.lang.Double" resetType="Page">
+		<variableExpression><![CDATA[new Double(($V{SUBTOTAL}.doubleValue())-($V{DESCUENTO}).doubleValue()+($V{IVA}).doubleValue())]]></variableExpression>
+		<initialValueExpression><![CDATA[new Double(0.0)]]></initialValueExpression>
+	</variable>
+	<group name="FOLIO" isStartNewPage="true">
+		<groupExpression><![CDATA[$F{FOLIO}]]></groupExpression>
+		<groupHeader>
+			<band splitType="Stretch"/>
+		</groupHeader>
+		<groupFooter>
+			<band splitType="Stretch"/>
+		</groupFooter>
+	</group>
+	<background>
+		<band splitType="Stretch"/>
+	</background>
+	<title>
+		<band splitType="Stretch"/>
+	</title>
+	<pageHeader>
+		<band height="287" splitType="Stretch">
+			<rectangle radius="4">
+				<reportElement key="rectangle-11" x="381" y="205" width="208" height="35" forecolor="#CCCCCC"/>
+			</rectangle>
+			<rectangle radius="4">
+				<reportElement key="rectangle-10" x="11" y="247" width="579" height="38" forecolor="#CCCCCC"/>
+			</rectangle>
+			<rectangle radius="4">
+				<reportElement key="rectangle-1" x="382" y="158" width="207" height="42" forecolor="#CCCCCC"/>
+			</rectangle>
+			<rectangle radius="4">
+				<reportElement key="rectangle-4" x="12" y="157" width="353" height="83" forecolor="#CCCCCC"/>
+			</rectangle>
+			<textField isStretchWithOverflow="true" pattern="" isBlankWhenNull="false">
+				<reportElement key="textField" mode="Opaque" x="76" y="158" width="283" height="12" forecolor="#000000" backcolor="#FFFFFF"/>
+				<textElement textAlignment="Left" verticalAlignment="Top" lineSpacing="Single">
+					<font reportFont="Arial_Normal"/>
+				</textElement>
+				<textFieldExpression class="java.lang.String"><![CDATA[$P{RAZON_SOCIAL}]]></textFieldExpression>
+			</textField>
+			<staticText>
+				<reportElement key="staticText-6" x="384" y="226" width="195" height="12" forecolor="#000066"/>
+				<textElement>
+					<font reportFont="Arial_Normal" size="6" isBold="true" pdfFontName="Helvetica-Bold"/>
+				</textElement>
+				<text><![CDATA[Este documento es una impresión de un comprobante fiscal digital]]></text>
+			</staticText>
+			<textField isStretchWithOverflow="true" pattern="" isBlankWhenNull="false">
+				<reportElement key="textField" mode="Opaque" x="85" y="186" width="274" height="47" forecolor="#000000" backcolor="#FFFFFF"/>
+				<textElement textAlignment="Left" verticalAlignment="Top" lineSpacing="Single">
+					<font reportFont="Arial_Normal"/>
+				</textElement>
+				<textFieldExpression class="java.lang.String"><![CDATA[$P{DOM_RECEPTOR}]]></textFieldExpression>
+			</textField>
+			<textField isStretchWithOverflow="true" pattern="" isBlankWhenNull="false">
+				<reportElement key="textField" mode="Opaque" x="41" y="172" width="130" height="12" forecolor="#000000" backcolor="#FFFFFF"/>
+				<textElement textAlignment="Left" verticalAlignment="Top" lineSpacing="Single">
+					<font reportFont="Arial_Normal"/>
+				</textElement>
+				<textFieldExpression class="java.lang.String"><![CDATA[$P{R_F_C}]]></textFieldExpression>
+			</textField>
+			<rectangle radius="4">
+				<reportElement key="rectangle-3" x="111" y="107" width="479" height="45" forecolor="#CCCCCC"/>
+			</rectangle>
+			<rectangle radius="4">
+				<reportElement key="rectangle-333" x="495" y="21" width="95" height="54" forecolor="#CCCCCC"/>
+			</rectangle>
+			<staticText>
+				<reportElement key="staticText-11" x="22" y="254" width="97" height="13" forecolor="#000066"/>
+				<textElement>
+					<font reportFont="Arial_Normal" isBold="true" pdfFontName="Helvetica-Bold"/>
+				</textElement>
+				<text><![CDATA[Datos de la Transacción]]></text>
+			</staticText>
+			<staticText>
+				<reportElement key="staticText-12" x="16" y="158" width="58" height="13" forecolor="#000066"/>
+				<textElement>
+					<font reportFont="Arial_Normal" isBold="true" pdfFontName="Helvetica-Bold"/>
+				</textElement>
+				<text><![CDATA[Facturado a:]]></text>
+			</staticText>
+			<staticText>
+				<reportElement key="staticText-14" x="16" y="172" width="23" height="11" forecolor="#000066"/>
+				<textElement>
+					<font reportFont="Arial_Normal" isBold="true" pdfFontName="Helvetica-Bold"/>
+				</textElement>
+				<text><![CDATA[RFC:]]></text>
+			</staticText>
+			<staticText>
+				<reportElement key="staticText-15" x="16" y="185" width="68" height="13" forecolor="#000066"/>
+				<textElement>
+					<font reportFont="Arial_Normal" isBold="true" pdfFontName="Helvetica-Bold"/>
+				</textElement>
+				<text><![CDATA[Domicilio Fiscal:]]></text>
+			</staticText>
+			<staticText>
+				<reportElement key="staticText-16" x="114" y="111" width="81" height="11" forecolor="#000066"/>
+				<textElement>
+					<font reportFont="Arial_Normal" isBold="true" pdfFontName="Helvetica-Bold"/>
+				</textElement>
+				<text><![CDATA[Contribuyente:]]></text>
+			</staticText>
+			<staticText>
+				<reportElement key="staticText-17" x="320" y="111" width="20" height="10" forecolor="#000066"/>
+				<textElement>
+					<font reportFont="Arial_Normal" isBold="true" pdfFontName="Helvetica-Bold"/>
+				</textElement>
+				<text><![CDATA[RFC:]]></text>
+			</staticText>
+			<staticText>
+				<reportElement key="staticText-18" x="114" y="123" width="68" height="11" forecolor="#000066"/>
+				<textElement>
+					<font reportFont="Arial_Normal" isBold="true" pdfFontName="Helvetica-Bold"/>
+				</textElement>
+				<text><![CDATA[Domicilio Fiscal:]]></text>
+			</staticText>
+			<staticText>
+				<reportElement key="staticText-19" x="385" y="162" width="92" height="10" forecolor="#000066"/>
+				<textElement>
+					<font reportFont="Arial_Normal" isBold="true" pdfFontName="Helvetica-Bold"/>
+				</textElement>
+				<text><![CDATA[Número de Certificado:]]></text>
+			</staticText>
+			<staticText>
+				<reportElement key="staticText-20" x="385" y="174" width="79" height="10" forecolor="#000066"/>
+				<textElement>
+					<font reportFont="Arial_Normal" isBold="true" pdfFontName="Helvetica-Bold"/>
+				</textElement>
+				<text><![CDATA[Año de Aprobación:]]></text>
+			</staticText>
+			<staticText>
+				<reportElement key="staticText-22" x="541" y="34" width="29" height="12" forecolor="#000066"/>
+				<textElement>
+					<font reportFont="Arial_Normal" size="10" isBold="true" pdfFontName="Helvetica-Bold"/>
+				</textElement>
+				<text><![CDATA[Folio]]></text>
+			</staticText>
+			<staticText>
+				<reportElement key="staticText-23" x="501" y="34" width="30" height="13" forecolor="#000066"/>
+				<textElement>
+					<font reportFont="Arial_Normal" size="10" isBold="true" pdfFontName="Helvetica-Bold"/>
+				</textElement>
+				<text><![CDATA[Serie]]></text>
+			</staticText>
+			<rectangle radius="4">
+				<reportElement key="rectangle-11" x="435" y="79" width="154" height="20" forecolor="#CCCCCC"/>
+			</rectangle>
+			<textField isStretchWithOverflow="true" pattern="" isBlankWhenNull="false">
+				<reportElement key="textField-1" mode="Opaque" x="464" y="186" width="94" height="12" forecolor="#000000" backcolor="#FFFFFF"/>
+				<textElement textAlignment="Left" verticalAlignment="Top" lineSpacing="Single">
+					<font reportFont="Arial_Normal"/>
+				</textElement>
+				<textFieldExpression class="java.lang.String"><![CDATA[$P{NUM_APROBACION}]]></textFieldExpression>
+			</textField>
+			<textField isStretchWithOverflow="true" pattern="" isBlankWhenNull="false">
+				<reportElement key="textField-2" mode="Opaque" x="465" y="174" width="106" height="10" forecolor="#000000" backcolor="#FFFFFF"/>
+				<textElement textAlignment="Left" verticalAlignment="Top" lineSpacing="Single">
+					<font reportFont="Arial_Normal"/>
+				</textElement>
+				<textFieldExpression class="java.lang.String"><![CDATA[$P{ANO_APROBACION}]]></textFieldExpression>
+			</textField>
+			<textField isStretchWithOverflow="true" pattern="" isBlankWhenNull="false">
+				<reportElement key="textField-3" mode="Opaque" x="541" y="49" width="45" height="20" forecolor="#000000" backcolor="#FFFFFF"/>
+				<textElement textAlignment="Left" verticalAlignment="Top" lineSpacing="Single">
+					<font reportFont="Arial_Normal" size="14" isBold="true"/>
+				</textElement>
+				<textFieldExpression class="java.lang.String"><![CDATA[$P{FOLIO_FAC}]]></textFieldExpression>
+			</textField>
+			<textField isStretchWithOverflow="true" pattern="" isBlankWhenNull="false">
+				<reportElement key="textField-4" mode="Opaque" x="502" y="49" width="27" height="21" forecolor="#000000" backcolor="#FFFFFF"/>
+				<textElement textAlignment="Left" verticalAlignment="Top" lineSpacing="Single">
+					<font reportFont="Arial_Normal" size="14" isBold="true"/>
+				</textElement>
+				<textFieldExpression class="java.lang.String"><![CDATA[$P{SERIE}]]></textFieldExpression>
+			</textField>
+			<textField isStretchWithOverflow="true" pattern="" isBlankWhenNull="false">
+				<reportElement key="textField-5" mode="Opaque" x="479" y="161" width="108" height="12" forecolor="#000000" backcolor="#FFFFFF"/>
+				<textElement textAlignment="Left" verticalAlignment="Top" lineSpacing="Single">
+					<font reportFont="Arial_Normal"/>
+				</textElement>
+				<textFieldExpression class="java.lang.String"><![CDATA[$P{SERIE_CERTIFICADO}]]></textFieldExpression>
+			</textField>
+			<textField isStretchWithOverflow="true" pattern="" isBlankWhenNull="false">
+				<reportElement key="textField-6" mode="Opaque" x="175" y="111" width="140" height="12" forecolor="#000000" backcolor="#FFFFFF"/>
+				<textElement textAlignment="Left" verticalAlignment="Top" lineSpacing="Single">
+					<font reportFont="Arial_Normal"/>
+				</textElement>
+				<textFieldExpression class="java.lang.String"><![CDATA[$P{NOM_EMISOR}]]></textFieldExpression>
+			</textField>
+			<textField isStretchWithOverflow="true" pattern="" isBlankWhenNull="false">
+				<reportElement key="textField-7" mode="Opaque" x="342" y="111" width="115" height="12" forecolor="#000000" backcolor="#FFFFFF"/>
+				<textElement textAlignment="Left" verticalAlignment="Top" lineSpacing="Single">
+					<font reportFont="Arial_Normal"/>
+				</textElement>
+				<textFieldExpression class="java.lang.String"><![CDATA[$P{RFC_EMISOR}]]></textFieldExpression>
+			</textField>
+			<textField isStretchWithOverflow="true" pattern="" isBlankWhenNull="false">
+				<reportElement key="textField-11" mode="Opaque" x="178" y="123" width="389" height="24" forecolor="#000000" backcolor="#FFFFFF"/>
+				<textElement textAlignment="Left" verticalAlignment="Top" lineSpacing="Single">
+					<font reportFont="Arial_Normal"/>
+				</textElement>
+				<textFieldExpression class="java.lang.String"><![CDATA[$P{DOM_EMISOR}]]></textFieldExpression>
+			</textField>
+			<staticText>
+				<reportElement key="staticText-25" x="22" y="271" width="35" height="13" forecolor="#000066"/>
+				<textElement>
+					<font reportFont="Arial_Normal" isBold="true" pdfFontName="Helvetica-Bold"/>
+				</textElement>
+				<text><![CDATA[Cantidad]]></text>
+			</staticText>
+			<staticText>
+				<reportElement key="staticText-26" x="271" y="271" width="50" height="13" forecolor="#000066"/>
+				<textElement>
+					<font reportFont="Arial_Normal" isBold="true" pdfFontName="Helvetica-Bold"/>
+				</textElement>
+				<text><![CDATA[Descripcion]]></text>
+			</staticText>
+			<staticText>
+				<reportElement key="staticText-27" x="461" y="271" width="27" height="13" forecolor="#000066"/>
+				<textElement>
+					<font reportFont="Arial_Normal" isBold="true" pdfFontName="Helvetica-Bold"/>
+				</textElement>
+				<text><![CDATA[Precio]]></text>
+			</staticText>
+			<staticText>
+				<reportElement key="staticText-28" x="531" y="271" width="33" height="13" forecolor="#000066"/>
+				<textElement>
+					<font reportFont="Arial_Normal" isBold="true" pdfFontName="Helvetica-Bold"/>
+				</textElement>
+				<text><![CDATA[Importe]]></text>
+			</staticText>
+			<staticText>
+				<reportElement key="staticText-29" x="106" y="271" width="30" height="13" forecolor="#000066"/>
+				<textElement>
+					<font reportFont="Arial_Normal" isBold="true" pdfFontName="Helvetica-Bold"/>
+				</textElement>
+				<text><![CDATA[Código]]></text>
+			</staticText>
+			<image>
+				<reportElement key="image-1" mode="Transparent" x="4" y="28" width="100" height="100" isRemoveLineWhenBlank="true"/>
+				<imageExpression class="java.lang.String"><![CDATA[$P{LOGO}]]></imageExpression>
+			</image>
+			<staticText>
+				<reportElement key="staticText-30" x="124" y="21" width="354" height="41" forecolor="#CC0000"/>
+				<textElement>
+					<font reportFont="Arial_Normal" fontName="Times New Roman" size="30" isBold="true" pdfFontName="Helvetica-Bold"/>
+				</textElement>
+				<text><![CDATA[CONFECCIONES VILAN]]></text>
+			</staticText>
+			<staticText>
+				<reportElement key="staticText-32" x="149" y="58" width="305" height="30" forecolor="#000066"/>
+				<textElement textAlignment="Center">
+					<font reportFont="Arial_Normal" fontName="Times New Roman" size="12" isBold="true" isItalic="true" pdfFontName="Helvetica-BoldOblique"/>
+				</textElement>
+				<text><![CDATA[Uniformes industriales, empresariales, escolares, deportivos, bordados.]]></text>
+			</staticText>
+			<staticText>
+				<reportElement key="staticText-33" x="385" y="186" width="79" height="10" forecolor="#000066"/>
+				<textElement>
+					<font reportFont="Arial_Normal" isBold="true" pdfFontName="Helvetica-Bold"/>
+				</textElement>
+				<text><![CDATA[No. de Aprobación:]]></text>
+			</staticText>
+			<staticText>
+				<reportElement key="staticText-34" x="517" y="22" width="51" height="14" forecolor="#000066"/>
+				<textElement>
+					<font reportFont="Arial_Normal" size="10" isBold="true" pdfFontName="Helvetica-Bold"/>
+				</textElement>
+				<text><![CDATA[FACTURA]]></text>
+			</staticText>
+			<staticText>
+				<reportElement key="staticText-24" x="439" y="83" width="36" height="12" forecolor="#000066"/>
+				<textElement>
+					<font reportFont="Arial_Normal" size="10" isBold="true" pdfFontName="Helvetica-Bold"/>
+				</textElement>
+				<text><![CDATA[Fecha:]]></text>
+			</staticText>
+			<staticText>
+				<reportElement key="staticText-3" x="384" y="209" width="62" height="13" forecolor="#000066"/>
+				<textElement>
+					<font reportFont="Arial_Normal" isBold="true" pdfFontName="Helvetica-Bold"/>
+				</textElement>
+				<text><![CDATA[Forma de Pago:]]></text>
+			</staticText>
+			<textField isStretchWithOverflow="true" pattern="" isBlankWhenNull="false">
+				<reportElement key="textField-8" mode="Opaque" x="448" y="209" width="110" height="12" forecolor="#000000" backcolor="#FFFFFF"/>
+				<textElement textAlignment="Left" verticalAlignment="Top" lineSpacing="Single">
+					<font reportFont="Arial_Normal"/>
+				</textElement>
+				<textFieldExpression class="java.lang.String"><![CDATA[$P{FORMA_PAGO}]]></textFieldExpression>
+			</textField>
+			<staticText>
+				<reportElement key="staticText-6" x="-181" y="-143" width="260" height="12" forecolor="#000066"/>
+				<textElement>
+					<font reportFont="Arial_Normal" isBold="true" pdfFontName="Helvetica-Bold"/>
+				</textElement>
+				<text><![CDATA[Este documento es una impresión de un comprobante fiscal digital]]></text>
+			</staticText>
+			<textField pattern="" isBlankWhenNull="false">
+				<reportElement key="textField" mode="Opaque" x="475" y="83" width="108" height="12" forecolor="#000000" backcolor="#FFFFFF"/>
+				<textElement textAlignment="Left" verticalAlignment="Middle" lineSpacing="Single">
+					<font reportFont="Arial_Normal" size="10" isBold="true"/>
+				</textElement>
+				<textFieldExpression class="java.lang.String"><![CDATA[$P{FECHA}]]></textFieldExpression>
+			</textField>
+			<rectangle radius="4">
+				<reportElement key="rectangle-11" x="36" y="-143" width="180" height="20" forecolor="#CCCCCC"/>
+			</rectangle>
+			<rectangle radius="4">
+				<reportElement key="rectangle-11" x="36" y="-139" width="180" height="20" forecolor="#CCCCCC"/>
+			</rectangle>
+			<rectangle radius="4">
+				<reportElement key="rectangle-11" x="36" y="-139" width="180" height="20" forecolor="#CCCCCC"/>
+			</rectangle>
+			<rectangle radius="4">
+				<reportElement key="rectangle-3" x="-263" y="-92" width="479" height="45" forecolor="#CCCCCC"/>
+			</rectangle>
+			<staticText>
+				<reportElement key="staticText-32" x="161" y="90" width="269" height="14" forecolor="#000066"/>
+				<textElement textAlignment="Center">
+					<font reportFont="Arial_Normal" fontName="Times New Roman" size="9" isBold="true" isItalic="true" pdfFontName="Helvetica-BoldOblique"/>
+				</textElement>
+				<text><![CDATA[Teléfonos: 5119-2052, 5752-0503 Tel/Fax: 5752-2869 ]]></text>
+			</staticText>
+		</band>
+	</pageHeader>
+	<columnHeader>
+		<band splitType="Stretch"/>
+	</columnHeader>
+	<detail>
+		<band height="9" splitType="Prevent">
+			<textField isStretchWithOverflow="true" pattern=" #,##0" isBlankWhenNull="false">
+				<reportElement key="textField" stretchType="RelativeToBandHeight" mode="Opaque" x="26" y="1" width="16" height="7" forecolor="#000000" backcolor="#FFFFFF"/>
+				<textElement textAlignment="Right" verticalAlignment="Middle" lineSpacing="Single">
+					<font reportFont="Arial_Normal" size="5"/>
+				</textElement>
+				<textFieldExpression class="java.lang.Integer"><![CDATA[$F{CANTIDAD}]]></textFieldExpression>
+			</textField>
+			<textField isStretchWithOverflow="true" pattern="" isBlankWhenNull="false">
+				<reportElement key="textField" stretchType="RelativeToBandHeight" mode="Opaque" x="80" y="1" width="85" height="7" forecolor="#000000" backcolor="#FFFFFF"/>
+				<textElement textAlignment="Left" verticalAlignment="Middle" lineSpacing="Single">
+					<font reportFont="Arial_Normal" size="5"/>
+				</textElement>
+				<textFieldExpression class="java.lang.String"><![CDATA[$F{NO_PARTE}]]></textFieldExpression>
+			</textField>
+			<textField isStretchWithOverflow="true" pattern="" isBlankWhenNull="false">
+				<reportElement key="textField" stretchType="RelativeToBandHeight" mode="Opaque" x="178" y="2" width="249" height="7" forecolor="#000000" backcolor="#FFFFFF"/>
+				<textElement textAlignment="Left" verticalAlignment="Top" lineSpacing="Single">
+					<font reportFont="Arial_Normal" size="5"/>
+				</textElement>
+				<textFieldExpression class="java.lang.String"><![CDATA[$F{DESCRIPCION}]]></textFieldExpression>
+			</textField>
+			<textField isStretchWithOverflow="true" pattern="#,##0.00" isBlankWhenNull="false">
+				<reportElement key="textField" stretchType="RelativeToBandHeight" mode="Opaque" x="427" y="0" width="60" height="7" forecolor="#000000" backcolor="#FFFFFF"/>
+				<textElement textAlignment="Right" verticalAlignment="Middle" lineSpacing="Single">
+					<font reportFont="Arial_Normal" size="5"/>
+				</textElement>
+				<textFieldExpression class="java.lang.Double"><![CDATA[$F{PRECIO}]]></textFieldExpression>
+			</textField>
+			<textField isStretchWithOverflow="true" pattern="#,##0.00" isBlankWhenNull="false">
+				<reportElement key="textField" stretchType="RelativeToBandHeight" mode="Opaque" x="523" y="1" width="55" height="7" forecolor="#000000" backcolor="#FFFFFF"/>
+				<textElement textAlignment="Right" verticalAlignment="Middle" lineSpacing="Single">
+					<font reportFont="Arial_Normal" size="5"/>
+				</textElement>
+				<textFieldExpression class="java.lang.Double"><![CDATA[$F{IMPORTE}]]></textFieldExpression>
+			</textField>
+		</band>
+	</detail>
+	<columnFooter>
+		<band splitType="Stretch"/>
+	</columnFooter>
+	<pageFooter>
+		<band height="214" splitType="Stretch">
+			<rectangle radius="4">
+				<reportElement key="rectangle-8" x="12" y="65" width="576" height="39" forecolor="#CCCCCC"/>
+			</rectangle>
+			<rectangle radius="4">
+				<reportElement key="rectangle-9" x="12" y="107" width="576" height="92" forecolor="#CCCCCC"/>
+			</rectangle>
+			<rectangle radius="4">
+				<reportElement key="rectangle-6" x="12" y="8" width="445" height="52" forecolor="#CCCCCC"/>
+			</rectangle>
+			<rectangle radius="4">
+				<reportElement key="rectangle-5" x="467" y="8" width="121" height="52" forecolor="#CCCCCC"/>
+			</rectangle>
+			<textField evaluationTime="Page" pattern="#,##0.00" isBlankWhenNull="false">
+				<reportElement key="textField" mode="Opaque" x="525" y="15" width="60" height="10" forecolor="#000000" backcolor="#FFFFFF"/>
+				<textElement textAlignment="Right" verticalAlignment="Top" lineSpacing="Single">
+					<font reportFont="Arial_Normal"/>
+				</textElement>
+				<textFieldExpression class="java.lang.Double"><![CDATA[$V{SUBTOTAL}]]></textFieldExpression>
+			</textField>
+			<textField evaluationTime="Page" pattern="#,##0.00" isBlankWhenNull="false">
+				<reportElement key="textField" mode="Opaque" x="525" y="27" width="60" height="11" forecolor="#000000" backcolor="#FFFFFF"/>
+				<textElement textAlignment="Right" verticalAlignment="Top" lineSpacing="Single">
+					<font reportFont="Arial_Normal"/>
+				</textElement>
+				<textFieldExpression class="java.lang.Double"><![CDATA[$V{IVA}]]></textFieldExpression>
+			</textField>
+			<textField isStretchWithOverflow="true" pattern="" isBlankWhenNull="false">
+				<reportElement key="textField" mode="Opaque" x="19" y="27" width="427" height="25" forecolor="#000000" backcolor="#FFFFFF"/>
+				<textElement textAlignment="Left" verticalAlignment="Top" lineSpacing="Single">
+					<font reportFont="Arial_Normal"/>
+				</textElement>
+				<textFieldExpression class="java.lang.String"><![CDATA[((org.nibble.util.Scriptlet)$P{REPORT_SCRIPTLET}).cantidadLetra()]]></textFieldExpression>
+			</textField>
+			<textField evaluationTime="Page" pattern="#,##0.00" isBlankWhenNull="false">
+				<reportElement key="textField" mode="Opaque" x="525" y="40" width="60" height="12" forecolor="#000000" backcolor="#FFFFFF"/>
+				<textElement textAlignment="Right" verticalAlignment="Top" lineSpacing="Single">
+					<font reportFont="Arial_Normal"/>
+				</textElement>
+				<textFieldExpression class="java.lang.Double"><![CDATA[$V{TOTAL}]]></textFieldExpression>
+			</textField>
+			<staticText>
+				<reportElement key="staticText-4" x="21" y="109" width="72" height="13" forecolor="#000066"/>
+				<textElement>
+					<font reportFont="Arial_Normal" isBold="true" pdfFontName="Helvetica-Bold"/>
+				</textElement>
+				<text><![CDATA[Cadena Original:]]></text>
+			</staticText>
+			<staticText>
+				<reportElement key="staticText-5" x="21" y="68" width="98" height="14" forecolor="#000066"/>
+				<textElement>
+					<font reportFont="Arial_Normal" isBold="true" pdfFontName="Helvetica-Bold"/>
+				</textElement>
+				<text><![CDATA[Sello Digital del Emisor:]]></text>
+			</staticText>
+			<staticText>
+				<reportElement key="staticText-7" x="19" y="12" width="60" height="13" forecolor="#000066"/>
+				<textElement>
+					<font reportFont="Arial_Normal" isBold="true" pdfFontName="Helvetica-Bold"/>
+				</textElement>
+				<text><![CDATA[Total con letra:]]></text>
+			</staticText>
+			<staticText>
+				<reportElement key="staticText-8" x="472" y="14" width="36" height="12" forecolor="#000066"/>
+				<textElement>
+					<font reportFont="Arial_Normal" isBold="true" pdfFontName="Helvetica-Bold"/>
+				</textElement>
+				<text><![CDATA[Subtotal:]]></text>
+			</staticText>
+			<staticText>
+				<reportElement key="staticText-9" x="472" y="27" width="18" height="12" forecolor="#000066"/>
+				<textElement>
+					<font reportFont="Arial_Normal" isBold="true" pdfFontName="Helvetica-Bold"/>
+				</textElement>
+				<text><![CDATA[IVA:]]></text>
+			</staticText>
+			<staticText>
+				<reportElement key="staticText-10" x="472" y="40" width="25" height="13" forecolor="#000066"/>
+				<textElement>
+					<font reportFont="Arial_Normal" isBold="true" pdfFontName="Helvetica-Bold"/>
+				</textElement>
+				<text><![CDATA[Total:]]></text>
+			</staticText>
+			<textField isStretchWithOverflow="true" pattern="" isBlankWhenNull="false">
+				<reportElement key="textField-9" mode="Opaque" x="14" y="118" width="564" height="79" forecolor="#000000" backcolor="#FFFFFF"/>
+				<textElement textAlignment="Left" verticalAlignment="Top" lineSpacing="Single">
+					<font reportFont="Arial_Normal" size="5"/>
+				</textElement>
+				<textFieldExpression class="java.lang.String"><![CDATA[$P{CADENA_ORIGINAL}]]></textFieldExpression>
+			</textField>
+			<textField isStretchWithOverflow="true" pattern="" isBlankWhenNull="false">
+				<reportElement key="textField-10" mode="Opaque" x="15" y="82" width="563" height="21" forecolor="#000000" backcolor="#FFFFFF"/>
+				<textElement textAlignment="Left" verticalAlignment="Top" lineSpacing="Single">
+					<font reportFont="Arial_Normal" size="6"/>
+				</textElement>
+				<textFieldExpression class="java.lang.String"><![CDATA[$P{SELLO_DIGITAL_EMISOR}]]></textFieldExpression>
+			</textField>
+		</band>
+	</pageFooter>
+	<summary>
+		<band splitType="Stretch"/>
+	</summary>
+</jasperReport>

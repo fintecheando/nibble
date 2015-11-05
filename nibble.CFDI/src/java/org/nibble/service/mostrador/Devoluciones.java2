@@ -1,0 +1,706 @@
+package pva.servlets9;
+
+import main.BeanError;
+import main.BeanUtil;
+import java.sql.Connection;
+import javax.servlet.RequestDispatcher;
+import javax.servlet.http.HttpServlet;
+import javax.servlet.http.HttpSession;
+
+import dbbeans.avisoingreso.dbAVISOINGRESO;
+import dbbeans.cliente.*;
+import dbbeans.configsistema.*;
+import dbbeans.configuracionpva.*;
+import dbbeans.ctaxcobrar.*;
+import dbbeans.factura.*;
+import dbbeans.inventario.*;
+import dbbeans.movimieninventario.*;
+import dbbeans.notacreditodetalle.*;
+import dbbeans.notadecredito.*;
+import dbrbeans.clientepaisestadomunicipio.*;
+import dbrbeans.facturadetalle.*;
+import pva.beans9.*;
+import java.util.Vector;
+
+/**
+ * DOCUMENT ME!
+ *
+ * @author $author$
+ * @version $Revision$
+ */
+public class Devoluciones extends HttpServlet{ 
+//main.MainServlet {
+	
+	private int idModulo;
+	private int ID_CONFIG;
+	private int ID_CONFIGPVA;
+	private short ID_TIPOMOVIMIENTO;
+	private int TIPOMOV_FAC;
+	private int TIPOMOV_NCR;
+	private int IDCLIENTESINIVA;
+	private int IDCLIENTECONIVA;
+	private int ID_MOV_DEVOLUCION;
+	private int ID_MOV_CANCELACION;
+    /**
+     * Cancela factura:
+     * PARA CADA PARTIDA EN FACTURA
+     *                Crea el detalle de las notas de credito
+     *                 Altera existencia en inventario
+     *                Crea un movimiento de inventario de cancelacion de FACTURA
+     * FIN CADA
+     * Crea la nota de credito
+     * Eliminar la ctaxcobrar
+     * Actualiza credito utilizado del cliente
+     *
+     * Creation date: (11/5/2002 1:50:38 PM)
+     * @param param javax.servlet.http.HttpServletRequest
+     */
+    private void cancelaFactura(javax.servlet.http.HttpServletRequest request, Bean92 bean92, Connection con, HttpSession ses_usr, int idsistema)
+            throws Exception {
+        dbFACTURA fac;
+        Bean92b bean = new Bean92b();
+
+        dbNOTACREDITODETALLE ncd = new dbNOTACREDITODETALLE();
+        dbNOTADECREDITO nc = new dbNOTADECREDITO();
+        dbCONFIGURACIONPVA configuracionpva = new dbCONFIGURACIONPVA();
+        dbNOTADECREDITOs ncs = new dbNOTADECREDITOs();
+        dbCTAXCOBRAR cxc = new dbCTAXCOBRAR();
+		dbCTAXCOBRARs cxcs = new dbCTAXCOBRARs();
+        dbINVENTARIO inventario = new dbINVENTARIO();        
+        dbCLIENTE cliente = new dbCLIENTE();
+        dbMOVIMIENINVENTARIO movimiento = new dbMOVIMIENINVENTARIO();
+		dbAVISOINGRESO dbai = new dbAVISOINGRESO();
+        dbrFACTURADETALLE fd;
+
+        ncd.setConnection(con);
+        nc.setConnection(con);
+        configuracionpva.setConnection(con);
+        ncs.setConnection(con);
+        cxc.setConnection(con);
+		cxcs.setConnection(con);
+        inventario.setConnection(con);
+        cliente.setConnection(con);
+        movimiento.setConnection(con);
+
+        configuracionpva.setIidconfpva(ID_CONFIGPVA);
+        configuracionpva.load();
+
+        //String hoy = util.Fecha.getCurrentDate("yyyyMMddHHmmss");
+		String hoy = util.Fecha.getCurrentDate("yyyyMMddHHmmss");
+        Integer userInt = (Integer) ses_usr.getAttribute("iidusuario");
+        int iidusuario = userInt.intValue();
+
+        int notadecredito = configuracionpva.getInumeronc();
+
+        // Checar si tiene una nota de credito
+        ncs.findByfactura(bean92.getIidfactura());
+
+        if (ncs.getResult().size() > 0) {
+            throw new Exception(
+                "Ya se han registrado notas de credito para la factura numero " + bean92.getIidfactura()
+                + " <BR> La factura ya no puede ser cancelada");
+        }
+
+        fac = bean92.getFactura();
+
+        for (int i = 0; i < bean92.getVPartidasSize(); i++) {
+            // Crea el detalle de las notas de credito para cada partida en la factura
+            ncd.setIidnotacredito(notadecredito);
+            ncd.setLiidparte(bean92.getLiidparte(i));
+            ncd.setIidproveedor(bean92.getIidproveedor(i));
+            ncd.setIcantidadproducto(bean92.getIcantidadproducto(i));
+            ncd.setDecpreciolista(bean92.getDecprecioventa(i));
+            ncd.setIidnivel(bean92.getIidnivel(i));
+            ncd.setDeccostoproducto(bean92.getDeccostoproducto(i));
+            ncd.setDecivaclasific(bean92.getDecivaclasific(i));
+            ncd.setDecimportedevol(bean92.getIcantidadproducto(i) * bean92.getDecprecioventa(i));
+            ncd.create();
+
+            // Altera existencia en inventario
+            inventario.setLiidparte(bean92.getLiidparte(i));
+            inventario.setIidproveedor(bean92.getIidproveedor(i));
+            inventario.load();
+            inventario.setIexistencia(inventario.getIexistencia() + bean92.getIcantidadproducto(i));
+            inventario.store();
+
+            // Crea un movimiento de inventario de cancelacion de FACTURA
+            movimiento.setLiidparte(bean92.getLiidparte(i));
+            movimiento.setIidproveedor(bean92.getIidproveedor(i));
+            movimiento.setTitipomov(ID_MOV_CANCELACION);
+            movimiento.setTisfechamov(hoy);
+            movimiento.setDeccostob100(bean92.getDecpreciolista(i));
+            movimiento.setDecporciva(bean92.getDecivaclasific(i));
+            movimiento.setDecprecioventa((bean92.getDecprecioventa(i) * (100 - fac.getDecdescglobal())) / 100);
+            movimiento.setIidreferencia(notadecredito);
+            movimiento.setIidusuario(iidusuario);
+            movimiento.setIcantidad(bean92.getIcantidadproducto(i));
+            movimiento.create();
+
+            fd = bean92.getPartida(i);
+            fd.setDevueltas(fd.getIcantidadproducto());
+        }
+
+        // Crea la nota de credito
+        nc.setIidnotacredito(notadecredito);
+        nc.setIidnocliente(fac.getIidnocliente());
+        nc.setIidusuario(iidusuario);
+        nc.setIidfactura(fac.getIidfactura());
+        nc.setTisfechanotacredit(hoy);
+        nc.setVchconcepto("");
+        nc.setDecimporte(fac.getDecsubtotal());
+        nc.setDecivaimporte(fac.getDecivatotal());
+        nc.setTitipomov(ID_MOV_CANCELACION);
+        nc.setDecporcdesc(fac.getDecdescglobal());
+        nc.setDecmontodesc(fac.getDecmontodesc());
+        nc.create();
+
+        //  calcular total de movimiento
+        float total = fac.getDecsubtotal() - fac.getDecmontodesc() + fac.getDecivatotal();
+        
+		/**		 
+		 *  Para poder generar el aviso de ingreso, debe obtener
+		 *  el saldo de la factura, y al monto de la nota de credito
+		 *  restarle ese saldo, si la diferencia es positiva genera 
+		 *  el aviso de ingreso
+		 */
+		float saldo = cxcs.findSaldoDocto(fac.getIidfactura(),TIPOMOV_FAC);
+		if (total-saldo > 0){
+			dbai.setConnection(con);
+			String fecha = util.Fecha.getCurrentDate("yyyyMMddHHmmss");			    
+			dbai.setIidnocliente(fac.getIidnocliente());					
+			dbai.setIidusuario(fac.getIidusuario());
+			dbai.setIidmodulo(idsistema);
+			dbai.setTisfecha(fecha);
+			dbai.setTitipopago(1);
+			dbai.setDecdebe(total-saldo);
+			dbai.setDechaber(0);
+			dbai.setVchconcepto("Aviso generado por Nota de Credito "+notadecredito);
+			dbai.create();
+			/*
+			if (dbai.findIidavisoingreso())
+				bean42.setMensaje("Se genero el Aviso de Ingreso No."+dbai.getIidavisoingreso());
+			*/				
+		}
+
+
+        // Crea la cta x cobrar
+        cxc.setIiddoctoorigen(notadecredito);
+        cxc.setTiidtipodocto(TIPOMOV_NCR);
+        cxc.setTiconsecsubdocto(1);
+        cxc.setIidnocliente(fac.getIidnocliente());
+        cxc.setTisfechamovimiento(hoy);
+        cxc.setTisfechavencimient(hoy);
+        cxc.setIidcontradocto(fac.getIidfactura());
+        cxc.setTiidtipocontradoc(TIPOMOV_FAC);
+        cxc.setDechaber(total);
+        cxc.create();
+
+        // Actualizar Haber en cta x cobrar de la factura
+        cxc.setIiddoctoorigen(fac.getIidfactura());
+        cxc.setTiidtipodocto(TIPOMOV_FAC);
+        cxc.setTiconsecsubdocto(1);
+        cxc.load();
+        cxc.setDechaber(cxc.getDechaber() + total);
+        cxc.store();
+
+        // Alterrar credito del cliente
+        cliente.setIidnocliente(fac.getIidnocliente());
+        cliente.load();
+        //cliente.setDeccreditutilizado(cliente.getDeccreditutilizado() - total);
+        cliente.store();
+
+        // LLena bean para imprimir
+        bean.setCliente(bean92.getCliente());
+        bean.setFactura(bean92.getFactura());
+        bean.setFecha(hoy);
+        bean.setOrigen("Cancelaci�n. Fac. " + fac.getIidfactura());
+        bean.setIidusuario(iidusuario);
+        bean.setReferencia(notadecredito);
+        bean.setIDCLIENTESINIVA(IDCLIENTESINIVA);
+
+        bean.setPartidas(bean92.getVPartidas());
+        ses_usr.setAttribute("bean", bean);
+        ses_usr.setAttribute("popupImprimir", new Boolean(true));
+
+        configuracionpva.setInumeronc(notadecredito + 1);
+        configuracionpva.store();
+
+        float iva = bean92.getIva();
+        String username = bean92.getUsername();
+        bean92 = null;
+        bean92 = new Bean92();
+        bean92.setIva(iva);
+        bean92.setUsername(username);
+        ses_usr.setAttribute("bean92", bean92);
+    }
+
+    /**
+     * Devolucion de partes sobre una factura:
+     * PARA CADA PARTIDA EN FACTURA EN EL QUE SE EFECTUA UNA DEVOLUCIOM
+     *                Checar que la partida no tenga conflictos con devoluciones previas
+     *                Crea el detalle de las notas de credito
+     *                 Altera existencia en inventario
+     *                Crea un movimiento de inventario de devolucion de FACTURA
+     * FIN CADA
+     * Crea la nota de credito
+     * Crea la cta x cobrar
+     * Actualizar Haber en cta x cobrar de la factura
+     * Actualiza credito utilizado del cliente
+     *
+     * Creation date: (11/5/2002 1:50:38 PM)
+     * @param param javax.servlet.http.HttpServletRequest
+     */
+    private void devolver(javax.servlet.http.HttpServletRequest request, Bean92 bean92, Connection con, HttpSession ses_usr, int idsistema)
+            throws Exception {
+        int[] cantidad = new int[bean92.getVPartidasSize()];
+        int devueltas;
+        float subtotal = 0;
+        float montodescuento = 0;
+        float montoiva = 0;
+        float total;
+        int cantidadTotal = 0;
+        dbFACTURA fac;
+        
+        //Variables para contener datos a imprimir
+        Vector v = new Vector();
+        dbrFACTURADETALLE fd = new dbrFACTURADETALLE();
+        Bean92b bean = new Bean92b();
+
+        //crea dbbeans
+        dbDEVUELTAS de = new dbDEVUELTAS();
+        dbNOTACREDITODETALLE ncd = new dbNOTACREDITODETALLE();
+        dbNOTADECREDITO nc = new dbNOTADECREDITO();
+        dbCTAXCOBRAR cxc = new dbCTAXCOBRAR();
+		dbCTAXCOBRARs cxcs = new dbCTAXCOBRARs();
+        dbCONFIGURACIONPVA configuracionpva = new dbCONFIGURACIONPVA();
+        dbINVENTARIO inventario = new dbINVENTARIO();
+        dbCLIENTE cliente = new dbCLIENTE();
+        dbMOVIMIENINVENTARIO movimiento = new dbMOVIMIENINVENTARIO();
+		dbAVISOINGRESO dbai = new dbAVISOINGRESO();
+
+        de.setConnection(con);
+        ncd.setConnection(con);
+        nc.setConnection(con);
+        cxc.setConnection(con);
+		cxcs.setConnection(con);
+        configuracionpva.setConnection(con);
+        inventario.setConnection(con);
+        cliente.setConnection(con);
+        movimiento.setConnection(con);
+
+        configuracionpva.setIidconfpva(ID_CONFIGPVA);
+        configuracionpva.load();
+
+        String hoy = util.Fecha.getCurrentDate("yyyyMMddHHmmss");
+        Integer userInt = (Integer) ses_usr.getAttribute("iidusuario");
+        int iidusuario = userInt.intValue();
+
+        int notadecredito = configuracionpva.getInumeronc();
+        
+        // carga cantidades desde el request
+        for (int i = 0; i < bean92.getVPartidasSize(); i++) {
+            if ((request.getParameter("cantidad" + i) != null) && (request.getParameter("cantidad" + i).length() > 0)) {
+                cantidad[i] = new Integer(request.getParameter("cantidad" + i)).intValue();
+            }
+
+            cantidadTotal += cantidad[i];
+        }
+
+        if (cantidadTotal == 0) {
+            throw new Exception("Todas las cantidades estan en 0");
+        }
+
+        // Para  las cantidades moyores a 0 checa la cantidad devuelta
+        boolean flag = false;
+
+        for (int i = 0; i < bean92.getVPartidasSize(); i++) {
+            if (cantidad[i] > 0) {
+                devueltas = de.getDevueltasByFacturaParte(
+                        bean92.getIidfactura(), bean92.getLiidparte(i), bean92.getIidproveedor(i));
+
+                if ((bean92.getIcantidadproducto(i) - devueltas) < cantidad[i]) {
+                    bean92.setDevueltas(i, devueltas);
+                    flag = true;
+                }
+            }
+        }
+
+        if (flag) {
+            bean92.setMsg(
+                "No es posible devolver la cantidad la cantidad de articulos indicada de las partes seleccionadas ya que existen conflictos con devoluciones previas");
+        }
+        // Procede en caso de poderse realizar la operaci�n
+        else {
+            fac = bean92.getFactura();
+
+            for (int i = 0; i < bean92.getVPartidasSize(); i++)
+                if (cantidad[i] > 0) {
+                    // Crea el detalle de las notas de credito
+                    ncd.setIidnotacredito(notadecredito);
+                    ncd.setLiidparte(bean92.getLiidparte(i));
+                    ncd.setIidproveedor(bean92.getIidproveedor(i));
+                    ncd.setIcantidadproducto(cantidad[i]);
+                    ncd.setDecpreciolista(bean92.getDecprecioventa(i));
+                    ncd.setIidnivel(bean92.getIidnivel(i));
+                    ncd.setDeccostoproducto(bean92.getDeccostoproducto(i));
+                    ncd.setDecivaclasific(bean92.getDecivaclasific(i));
+                    ncd.setDecimportedevol(cantidad[i] * bean92.getDecprecioventa(i));
+                    ncd.create();
+
+                    // Altera existencia en inventario
+                    inventario.setLiidparte(bean92.getLiidparte(i));
+                    inventario.setIidproveedor(bean92.getIidproveedor(i));
+                    inventario.load();
+                    inventario.setIexistencia(inventario.getIexistencia() + cantidad[i]);
+                    inventario.store();
+
+                    // Crea un movimiento de inventario de devolucion
+                    movimiento.setLiidparte(bean92.getLiidparte(i));
+                    movimiento.setIidproveedor(bean92.getIidproveedor(i));
+                    movimiento.setTitipomov(ID_MOV_DEVOLUCION);
+                    movimiento.setTisfechamov(hoy);
+                    movimiento.setDeccostob100(bean92.getDecpreciolista(i));
+                    movimiento.setDecporciva(bean92.getDecivaclasific(i));
+                    movimiento.setDecprecioventa((bean92.getDecprecioventa(i) * (100 - fac.getDecdescglobal())) / 100);
+                    movimiento.setIidreferencia(notadecredito);
+                    movimiento.setIidusuario(iidusuario);
+                    movimiento.setIcantidad(cantidad[i]);
+                    movimiento.create();
+
+                    //Agregar detalle a imprimir
+                    fd = bean92.getPartida(i);
+                    fd.setDevueltas(cantidad[i]);
+                    v.addElement(bean92.getPartida(i));
+
+                    subtotal += (cantidad[i] * bean92.getDecprecioventa(i));
+                }
+
+            if (bean92.isMostradorSinIVA()) {
+                total = subtotal;
+            } else {
+                montodescuento = Calcula.redondeo((subtotal * fac.getDecdescglobal()) / 100);
+                montoiva = Calcula.redondeo((subtotal - montodescuento) * (bean92.getIva() / 100));
+                total = subtotal - montodescuento + montoiva;
+            }
+            
+			int TIPOMOV_BONI = 3;
+			int Idcontradocto = fac.getIidfactura();
+			int Iddocto = fac.getIidfactura();
+			
+			float saldoBonificacion = cxcs.findSaldoContraDocto(Idcontradocto,TIPOMOV_BONI,Iddocto,TIPOMOV_FAC);
+			Double saldoBonificacionSinIVa = new Double( (saldoBonificacion)/1.15);
+			float saldoBonificacionSinIVA = saldoBonificacionSinIVa.floatValue();			
+			Double IVasaldoBonificacion =   new Double( (saldoBonificacion)+(saldoBonificacion / 1.15));
+			float IVAsaldoBonificacion = IVasaldoBonificacion.floatValue();
+			
+            // Crea la nota de credito
+            nc.setIidnotacredito(notadecredito);
+            nc.setIidnocliente(fac.getIidnocliente());
+            nc.setIidusuario(iidusuario);
+            nc.setIidfactura(fac.getIidfactura());
+            //  nc.Vchletra;
+            //	nc.setInumero;
+            nc.setTisfechanotacredit(hoy);
+            nc.setVchconcepto("");
+            nc.setDecimporte(subtotal +  IVAsaldoBonificacion);
+            nc.setDecivaimporte(montoiva + IVAsaldoBonificacion);
+            nc.setTitipomov(ID_MOV_DEVOLUCION);
+            nc.setDecporcdesc(fac.getDecdescglobal());            
+            nc.setDecmontodesc(montodescuento);
+            nc.create();
+
+			/**			 
+			 *  Para poder generar el aviso de ingreso, debe obtener
+			 *  el saldo de la factura, y al monto de la nota de credito
+			 *  restarle ese saldo, si la diferencia es positiva genera 
+			 *  el aviso de ingreso
+			 */
+			float saldo = cxcs.findSaldoDocto(fac.getIidfactura(),TIPOMOV_FAC);
+			/*int TIPOMOV_BONI = 3;
+			int Idcontradocto = fac.getIidfactura();
+			int Iddocto = fac.getIidfactura();*/
+			//float saldoBonificacion = cxcs.findSaldoContraDocto(fac.getIidfactura(),TIPOMOV_BONI,fac.getIidfactura(),TIPOMOV_FAC);
+			//float saldoBonificacion = cxcs.findSaldoContraDocto(Idcontradocto,TIPOMOV_BONI,Iddocto,TIPOMOV_FAC);
+			if (total-saldo > 0){
+				dbai.setConnection(con);
+				String fecha = util.Fecha.getCurrentDate("yyyyMMddHHmmss");
+
+				dbai.setIidnocliente(fac.getIidnocliente());					
+				dbai.setIidusuario(fac.getIidusuario());
+				dbai.setIidmodulo(idsistema);
+				dbai.setTisfecha(fecha);
+				dbai.setTitipopago(1);
+				dbai.setDecdebe(total-saldo+saldoBonificacion);
+				//dbai.setDecdebe(saldo);								
+				dbai.setDechaber(0);
+				dbai.setVchconcepto("Aviso generado por Nota de Credito "+notadecredito);
+				dbai.create();
+				/*
+				if (dbai.findIidavisoingreso())
+					bean42.setMensaje("Se genero el Aviso de Ingreso No."+dbai.getIidavisoingreso());
+				*/				
+			}
+			
+            // Crea la cta x cobrar
+            cxc.setIiddoctoorigen(notadecredito);
+            cxc.setTiidtipodocto(TIPOMOV_NCR);
+            cxc.setTiconsecsubdocto(1);
+            cxc.setIidnocliente(fac.getIidnocliente());
+            cxc.setTisfechamovimiento(hoy);
+            cxc.setTisfechavencimient(hoy);
+            cxc.setIidcontradocto(fac.getIidfactura());
+            cxc.setTiidtipocontradoc(TIPOMOV_FAC);
+            cxc.setDechaber(total+saldoBonificacion);
+            cxc.create();
+
+            // Actualizar Haber en cta x cobrar de la factura
+            cxc.setIiddoctoorigen(fac.getIidfactura());
+            cxc.setTiidtipodocto(TIPOMOV_FAC);
+            cxc.setTiconsecsubdocto(1);
+            cxc.load();
+            cxc.setDechaber(cxc.getDechaber() + total);
+            cxc.store();
+            cliente.setIidnocliente(fac.getIidnocliente());
+            cliente.load();
+            cliente.setDeccreditutilizado(cliente.getDeccreditutilizado() - saldo-saldoBonificacion);
+            //            cliente.setDeccreditutilizado(cliente.getDeccreditutilizado() - saldo+saldoBonificacion);
+            cliente.store();
+
+            // actualiza folio en configuracionpva
+            configuracionpva.setInumeronc(notadecredito + 1);
+            configuracionpva.store();
+
+            // LLena bean para imprimir
+            bean.setCliente(bean92.getCliente());
+            bean.setFactura(bean92.getFactura());
+            bean.setFecha(hoy);
+            bean.setOrigen("Devol. Cont. Fac. " + fac.getIidfactura());
+            bean.setIidusuario(iidusuario);
+            bean.setReferencia(notadecredito);
+            bean.setIDCLIENTESINIVA(IDCLIENTESINIVA);
+
+            bean.setPartidas(v);
+            ses_usr.setAttribute("bean", bean);
+            ses_usr.setAttribute("popupImprimir", new Boolean(true));
+
+            // Resetea el bean92
+            float iva = bean92.getIva();
+            String username = bean92.getUsername();
+            bean92 = null;
+            bean92 = new Bean92();
+            bean92.setIva(iva);
+            bean92.setUsername(username);
+            ses_usr.setAttribute("bean92", bean92);
+        }
+    }
+
+    /**
+     * DOCUMENT ME!
+     *
+     * @param request DOCUMENT ME!
+     * @param response DOCUMENT ME!
+     *
+     * @throws javax.servlet.ServletException DOCUMENT ME!
+     * @throws java.io.IOException DOCUMENT ME!
+     */
+    public void doGet(javax.servlet.http.HttpServletRequest request, javax.servlet.http.HttpServletResponse response)
+            throws javax.servlet.ServletException, java.io.IOException {
+        performTask(request, response);
+    }
+
+    /**
+     * DOCUMENT ME!
+     *
+     * @param request DOCUMENT ME!
+     * @param response DOCUMENT ME!
+     *
+     * @throws javax.servlet.ServletException DOCUMENT ME!
+     * @throws java.io.IOException DOCUMENT ME!
+     */
+    public void doPost(javax.servlet.http.HttpServletRequest request, javax.servlet.http.HttpServletResponse response)
+            throws javax.servlet.ServletException, java.io.IOException {
+        performTask(request, response);
+    }
+
+    /**
+     * DOCUMENT ME!
+     */
+    public void init() {
+		idModulo = (getServletConfig().getInitParameter("idModulo") != null)
+						? new Integer(getServletConfig().getInitParameter("idModulo")).intValue() : (-1);        
+        ID_CONFIG = new Integer(getServletConfig().getInitParameter("ID_CONFIG")).intValue();
+        ID_CONFIGPVA = new Integer(getServletConfig().getInitParameter("ID_CONFIGPVA")).intValue();
+        ID_TIPOMOVIMIENTO = new Short(getServletConfig().getInitParameter("ID_TIPOMOVIMIENTO")).shortValue();
+        TIPOMOV_FAC = new Short(getServletConfig().getInitParameter("TIPOMOV_FAC")).shortValue();
+        TIPOMOV_NCR = new Short(getServletConfig().getInitParameter("TIPOMOV_NCR")).shortValue();
+        IDCLIENTESINIVA = new Integer(getServletConfig().getInitParameter("IDCLIENTESINIVA")).intValue();
+        IDCLIENTECONIVA = new Integer(getServletConfig().getInitParameter("IDCLIENTECONIVA")).intValue();
+        ID_MOV_DEVOLUCION = new Integer(getServletConfig().getInitParameter("ID_MOV_DEVOLUCION")).intValue();
+        ID_MOV_CANCELACION = new Integer(getServletConfig().getInitParameter("ID_MOV_CANCELACION")).intValue();
+    }
+
+    /**
+     * DOCUMENT ME!
+     *
+     * @param request DOCUMENT ME!
+     * @param bean92 DOCUMENT ME!
+     *
+     * @throws Exception DOCUMENT ME!
+     */
+    private void initial(javax.servlet.http.HttpServletRequest request, Bean92 bean92, Connection con, HttpSession ses_usr)
+            throws Exception {
+        dbCONFIGSISTEMA configsistema = new dbCONFIGSISTEMA();
+
+        configsistema.setConnection(con);
+
+        configsistema.setIidconfsistema(ID_CONFIG);
+
+        configsistema.load();
+
+        // carga IVA y el nombre de usuario al bean 
+        bean92.setIva(configsistema.getDecivaaplicable());
+        bean92.setUsername((String) ses_usr.getAttribute("username"));
+    }
+
+    /**
+     * Carga Factura y datos del cliente
+     *
+     * Creation date: (11/5/2002 1:50:38 PM)
+     * @param param javax.servlet.http.HttpServletRequest
+     */
+    private void loadFactura(javax.servlet.http.HttpServletRequest request, Bean92 bean92, Connection con)
+            throws Exception {
+        dbFACTURA factura = new dbFACTURA();
+        dbrCLIENTE cliente = new dbrCLIENTE();
+        dbrFACTURADETALLEs dbrfacturadetalles = new dbrFACTURADETALLEs();
+        dbCTAXCOBRAR cxc = new dbCTAXCOBRAR();
+
+        int iidfactura = 0;
+
+        if ((request.getParameter("iidfactura") != null) && (request.getParameter("iidfactura").length() > 0)) {
+            iidfactura = new Integer(request.getParameter("iidfactura")).intValue();
+        }
+
+        factura.setConnection(con);
+        cliente.setConnection(con);
+        cxc.setConnection(con);
+
+        dbrfacturadetalles.setConnection(con);
+
+        factura.setIidfactura(iidfactura);
+        factura.load();
+
+        cxc.setIiddoctoorigen(iidfactura);
+        cxc.setTiidtipodocto(TIPOMOV_FAC);
+        cxc.setTiconsecsubdocto(1);
+
+        // si la factura no tiene su ctaxcobrar correspondinte es ya se cancelo
+        try {
+            cxc.load();
+        } catch (Exception e) {
+            throw new Exception("La factura ya ha sido cancelada previamente");
+        }
+
+        bean92.setFactura(factura);
+
+        cliente.setIidnocliente(factura.getIidnocliente());
+        cliente.load();
+        bean92.setCliente(cliente);
+
+        if (cliente.getIidnocliente() == IDCLIENTESINIVA) {
+            bean92.setMostradorSinIVA(true);
+        }
+
+        dbrfacturadetalles.findByIidfactura(iidfactura);
+
+        bean92.setVPartidas(dbrfacturadetalles.getResult());
+
+    }
+
+    /**
+     * DOCUMENT ME!
+     *
+     * @param request DOCUMENT ME!
+     * @param response DOCUMENT ME!
+     */
+    public void performTask(javax.servlet.http.HttpServletRequest request, javax.servlet.http.HttpServletResponse response) {
+		Connection con = null;
+		HttpSession ses_usr = null;
+		BeanUtil bu = null;
+		RequestDispatcher dispatcher = null;
+		String strAddress = null;
+		try {
+			ses_usr = request.getSession(false);
+			bu = new BeanUtil();		
+			con = bu.getConn();		
+			bu.setSession(ses_usr);
+		
+			if (!bu.getSessionValues())throw new Exception("Por motivos de seguridad la sesi�n ha expirado\n Registrese nuevamente");
+			if (!bu.getAcceso(idModulo,con))throw new Exception("No tiene permiso a este m�dulo");
+
+            int accion = 1;
+			String fechaini = new String();
+			String fechafin = new String();
+			Bean92 bean92 = new Bean92();            
+
+            if (request.getParameter("accion") != null) {
+                accion = new Integer(request.getParameter("accion")).intValue();
+            }
+
+            ses_usr.setAttribute("popupImprimir", new Boolean(false));
+
+            if (accion != 1) {
+                bean92 = (Bean92) ses_usr.getAttribute("bean92");
+            } else {
+                ses_usr.setAttribute("bean92", bean92);
+            }
+
+            bean92.setMsg("");
+
+            for (int i = 0; i < bean92.getVPartidasSize(); i++)
+                bean92.setDevueltas(i, 0);
+
+            switch (accion) {
+                // 9.2 Mostrar patalla inicial
+                case 1:
+                    initial(request, bean92, con, ses_usr);
+                    strAddress = "/jsp/9_2.jsp";
+
+                    break;
+
+                // 9.2 Cargar cliente y partidas para la factura
+                case 2:
+                    loadFactura(request, bean92, con);
+					strAddress = "/jsp/9_2.jsp";
+                    break;
+
+                case 3:
+                    devolver(request, bean92, con, ses_usr, bu.getSistema());
+                    strAddress = "/jsp/9_2.jsp";
+
+                    break;
+
+                case 4:
+                    cancelaFactura(request, bean92, con, ses_usr, bu.getSistema());
+                    strAddress = "/jsp/9_2.jsp";
+
+                    break;
+            }
+        } catch (Throwable e) {
+			bu.setCommit(false);
+			e.printStackTrace();
+			BeanError error = new BeanError();
+			error.setErrorMessage(e.getMessage());
+			request.setAttribute("error",error);
+			strAddress =  "/jsp/error.jsp";
+		} finally {
+			try{
+				bu.finalizeTransaction(con);
+				dispatcher = getServletContext().getRequestDispatcher(strAddress);
+				dispatcher.forward(request, response);    		
+			}catch (Exception ex){
+				System.out.println("FATAL:"+ex.getMessage());
+			}
+		}
+    }
+}
